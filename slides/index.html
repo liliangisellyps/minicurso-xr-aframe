@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Realidade Estendida com A-Frame · Slides</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>/* Minicurso XR com A-Frame · v2 */
+body { font-family: 'IBM Plex Sans', Arial, sans-serif; color: #14182B; }
+
+section {
+  background: #F6F4EF;
+  color: #14182B;
+  padding: 128px 128px 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+section.dark {
+  background: #14182B;
+  color: #F6F4EF;
+  padding: 128px;
+  justify-content: center;
+  gap: 32px;
+}
+section.accent {
+  background: #5B3FC4;
+  color: #F6F4EF;
+  padding: 128px;
+  justify-content: center;
+  gap: 40px;
+}
+section.cover { justify-content: space-between; gap: 0; }
+
+h1 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1.05; }
+h1.huge { font-size: 160px; line-height: 1; }
+h1.statement { font-size: 96px; line-height: 1.1; }
+h2 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 72px; font-weight: 600; line-height: 1.1; }
+h3 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15; }
+p { font-size: 32px; line-height: 1.4; }
+
+.head { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: 24px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #5B3FC4; }
+.dark .eyebrow { font-size: 28px; color: #B7A6F5; }
+.accent .eyebrow { font-size: 28px; color: #E6E3F5; }
+.sub { font-size: 36px; color: #C9C6D9; }
+.accent .sub { font-size: 40px; color: #E6E3F5; }
+.muted { color: #4A4E63; }
+.lead { font-size: 36px; color: #4A4E63; }
+.tag { font-size: 28px; color: #5B3FC4; }
+.tag-strong { font-size: 28px; font-weight: 600; color: #5B3FC4; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 32px; }
+.split { display: grid; grid-template-columns: 1fr 760px; gap: 48px; }
+.col { display: flex; flex-direction: column; gap: 24px; }
+
+.card { display: flex; flex-direction: column; gap: 16px; background: #FFFDF8; border: 1px solid #E2DED3; border-radius: 16px; padding: 40px; }
+.card .body { font-size: 30px; color: #4A4E63; }
+.card.dk { background: #14182B; color: #F6F4EF; border: 1px solid #14182B; }
+.card.dk .body { color: #C9C6D9; }
+.card.dk .tag-strong { color: #B7A6F5; }
+.card.warn { background: #FBE9E4; border: 2px solid #E8735A; }
+.card.warn h3 { color: #8A3220; }
+.card.warn .body { color: #14182B; }
+
+.stat { display: flex; flex-direction: column; gap: 8px; border-top: 6px solid #7B5CD6; padding-top: 32px; }
+.stat.alt { border-top: 6px solid #E8735A; }
+.num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.num.violet { color: #5B3FC4; }
+
+.code { background: #14182B; border-radius: 16px; padding: 40px; }
+.code .src { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 26px; line-height: 1.6; color: #E6E3F5; }
+.code .src.small { font-size: 24px; }
+.k { color: #B7A6F5; }
+.s { color: #F2B8A8; }
+.cm { color: #8A8FA8; }
+
+.pill { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 28px; background: #E6E3F5; color: #2E2A5C; padding: 12px 24px; border-radius: 12px; }
+.mono { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 28px; color: #2E2A5C; }
+.steps { font-size: 32px; line-height: 1.5; color: #4A4E63; }
+.danger { font-size: 28px; font-weight: 600; color: #8A3220; }
+
+.shot { border-radius: 16px; object-fit: cover; box-shadow: 0 12px 40px rgba(20, 24, 43, 0.18); }
+.caption { font-size: 24px; color: #6B6F80; }
+
+.layer { display: grid; grid-template-columns: 420px 1fr; gap: 32px; align-items: center; color: #F6F4EF; border-radius: 12px; padding: 24px 40px; }
+.layer .name { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 600; }
+.layer .what { font-size: 30px; }
+
+table { font-size: 28px; color: #14182B; }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; color: #6B6F80; }
+
+/* Entrada em etapas: o estado final é o normal; a animação só parte de baixo */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes grow {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.rise { animation: rise 600ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+.grow { animation: grow 700ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+
+/* Passos no ritmo da fala (clique) */
+.fragment { opacity: 0; transform: translateY(16px); transition: opacity 400ms ease-out, transform 400ms ease-out; }
+.fragment.visible { opacity: 1; transform: translateY(0); }
+
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0B0E1A;overflow:hidden}
+#stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
+#stage>section{position:absolute;inset:0;width:1920px;height:1080px}
+iframe.embed{border:0;background:transparent;position:absolute}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:8px 12px;
+  font:14px 'IBM Plex Sans',Arial,sans-serif;color:#C9C6D9;opacity:0;transition:opacity .3s}
+body:hover #bar,#bar:focus-within{opacity:1}
+#bar button{background:rgba(255,255,255,.08);color:#F6F4EF;border:0;border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer}
+#bar button:hover{background:rgba(255,255,255,.18)}
+#count{margin-left:auto}
+#prog{position:fixed;left:0;bottom:0;height:3px;background:#5B3FC4;transition:width .3s}
+@media (hover:none){#bar{opacity:1}}
+</style></head><body>
+<div id="stage"></div>
+<div id="prog"></div>
+<div id="bar"><button id="bp" aria-label="Slide anterior">&larr;</button><button id="bn" aria-label="Próximo slide">&rarr;</button>
+<button id="bf">Tela cheia (F)</button><span id="count"></span></div>
+<template data-id="cover"><section id="cover" class="dark cover" data-transition="fade">
+<img src="img/m1-sala.png" alt="Cena da Aula 1: mesa com cubo, esfera e cilindro em escala real" style="position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:cover;opacity:0.18">
+<p class="eyebrow rise" style="--i:0">Minicurso · Estágio Docência em Computação Gráfica</p>
+<div class="head">
+<h1 class="rise" style="--i:1">Realidade Estendida<br>com A-Frame</h1>
+<p class="sub rise" style="--i:2">Do pipeline gráfico ao headset, em 4 horas</p>
+</div>
+<p class="sub rise" style="--i:3;font-size:28px">Lilian Giselly Pereira Santos · UFAL · Instituto de Computação</p>
+
+</section>
+</template>
+<template data-id="roteiro"><section id="roteiro" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Roteiro</p>
+<h2>Duas aulas, duas semanas</h2>
+</div>
+<div class="grid2">
+<div class="card rise" style="--i:0;padding:48px"><p class="tag-strong" style="font-size:24px">Aula 1 · hoje · 2h</p><h3>Fundamentos de XR</h3><p class="body">Primeira cena, no navegador</p></div>
+<div class="card dk rise" style="--i:1;padding:48px"><p class="tag-strong" style="font-size:24px">Aula 2 · próxima semana · 2h</p><h3>Componentes e interação</h3><p class="body">Código próprio, interação e, no fim, o Quest</p></div>
+</div>
+<p class="muted">Prática: um arquivo <b>.html</b> aberto no navegador</p>
+<p class="foot">Minicurso XR com A-Frame</p>
+
+</section>
+</template>
+<template data-id="m1-titulo"><section id="m1-titulo" class="dark" data-transition="push">
+<p class="eyebrow rise" style="--i:0">Aula 1 · 2h</p>
+<h1 class="rise" style="--i:1">Fundamentos de XR</h1>
+<p class="sub rise" style="--i:2">O que muda quando o usuário está dentro da cena</p>
+
+</section>
+</template>
+<template data-id="m1-espectro"><section id="m1-espectro" data-transition="fade">
+<div class="head">
+<p class="eyebrow">O espectro</p>
+<h2>XR é o guarda-chuva de RV, RA e RM</h2>
+</div>
+<div class="grow" style="height:16px;border-radius:8px;background:linear-gradient(90deg, #C9C6D9 0%, #7B5CD6 100%)"></div>
+<div class="grid3">
+<div class="card rise" style="--i:1"><h3>Realidade aumentada</h3><p class="body">Virtual por cima do real</p><p class="tag">Filtros de câmera</p></div>
+<div class="card rise" style="--i:2"><h3>Realidade mista</h3><p class="body">Virtual que entende o espaço</p><p class="tag">Vaso sobre a mesa real</p></div>
+<div class="card rise" style="--i:3"><h3>Realidade virtual</h3><p class="body">Ambiente todo sintético</p><p class="tag">Simuladores, jogos</p></div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-presenca"><section id="m1-presenca" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Dois conceitos que se confundem</p>
+<h2>Imersão é da máquina; presença é da pessoa</h2>
+</div>
+<div class="grid2">
+<div class="card rise" style="--i:0;padding:48px;gap:20px"><h3>Imersão</h3><p class="body">Campo de visão, resolução, FPS, rastreamento</p><p class="tag-strong">Objetiva</p></div>
+<div class="card dk rise" style="--i:1;padding:48px;gap:20px"><h3>Presença</h3><p class="body">A sensação de “estar lá”</p><p class="tag-strong">Subjetiva</p></div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-rastreamento"><section id="m1-rastreamento" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Rastreamento</p>
+<h2>O headset sabe para onde você olha e onde você está</h2>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0;gap:12px"><p class="num violet">3DoF</p><p class="body">Só rotação</p></div>
+<div class="card rise" style="--i:1;gap:12px"><p class="num violet">6DoF</p><p class="body">Rotação + translação</p></div>
+<div class="card dk rise" style="--i:2;gap:12px"><h3>Quest 3S</h3><p class="body">Inside-out: câmeras no headset. Controles e mãos.</p></div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-estereo"><section id="m1-estereo" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Estereoscopia</p>
+<h2>Uma cena, duas câmeras</h2>
+</div>
+<iframe class="embed" style="position:absolute;left:128px;top:340px;width:880px;height:560px" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var W=880,H=560,c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),d=window.devicePixelRatio||1;
+c.width=W*d;c.height=H*d;c.style.width=W+&#x27;px&#x27;;c.style.height=H+&#x27;px&#x27;;x.scale(d,d);
+var V=[];for(var i=0;i&lt;8;i++)V.push([i&amp;1?1:-1,i&amp;2?1:-1,i&amp;4?1:-1]);
+var E=[[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]];
+function rr(px,py,w,h,r){x.beginPath();x.moveTo(px+r,py);x.arcTo(px+w,py,px+w,py+h,r);x.arcTo(px+w,py+h,px,py+h,r);x.arcTo(px,py+h,px,py,r);x.arcTo(px,py,px+w,py,r);x.closePath();}
+function view(ox,eye,col,label,t){
+x.fillStyle=&#x27;#14182B&#x27;;rr(ox,0,420,440,18);x.fill();
+x.strokeStyle=&#x27;rgba(246,244,239,0.3)&#x27;;x.lineWidth=2;x.setLineDash([8,8]);x.beginPath();x.moveTo(ox+210,24);x.lineTo(ox+210,416);x.stroke();x.setLineDash([]);
+var ca=Math.cos(t),sa=Math.sin(t),cr=Math.cos(0.45),sr=Math.sin(0.45);
+var P=V.map(function(v){var X=v[0]*ca+v[2]*sa,Z=-v[0]*sa+v[2]*ca,Y=v[1]*cr-Z*sr;Z=v[1]*sr+Z*cr+5.5;return[ox+210+(X-eye)/Z*360,220-Y/Z*360];});
+x.strokeStyle=col;x.lineWidth=4;x.lineJoin=&#x27;round&#x27;;x.beginPath();E.forEach(function(e){x.moveTo(P[e[0]][0],P[e[0]][1]);x.lineTo(P[e[1]][0],P[e[1]][1]);});x.stroke();
+x.fillStyle=col;x.font=&#x27;600 28px system-ui,&quot;Segoe UI&quot;,sans-serif&#x27;;x.textAlign=&#x27;center&#x27;;x.fillText(label,ox+210,500);}
+function f(ms){var t=ms/2600;x.clearRect(0,0,W,H);view(0,-0.45,&#x27;#B7A6F5&#x27;,&#x27;Olho esquerdo&#x27;,t);view(460,0.45,&#x27;#F2A58F&#x27;,&#x27;Olho direito&#x27;,t);requestAnimationFrame(f);}
+requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<div style="position:absolute;left:1072px;top:360px;width:720px;display:flex;flex-direction:column;gap:28px">
+<p class="lead rise" style="--i:1">Uma imagem por olho</p>
+<p class="lead rise" style="--i:2">Pipeline 2× por quadro</p>
+<p class="lead rise" style="--i:3"><b>IPD</b>: distância entre pupilas</p>
+<p class="lead rise" style="--i:4"><b>FOV</b>: campo de visão</p>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-orcamento"><section id="m1-orcamento" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Orçamento de tempo</p>
+<h2>Dois olhos renderizados em poucos milissegundos</h2>
+</div>
+<div class="grid3">
+<div class="stat rise" style="--i:0"><p class="num">13,9 ms</p><p class="muted">por quadro a 72 Hz</p></div>
+<div class="stat rise" style="--i:1"><p class="num">11,1 ms</p><p class="muted">por quadro a 90 Hz</p></div>
+<div class="stat rise" style="--i:2"><p class="num">8,3 ms</p><p class="muted">por quadro a 120 Hz</p></div>
+</div>
+<iframe class="embed" style="position:absolute;left:128px;top:600px;width:1664px;height:300px" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var W=1664,H=300,c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),d=window.devicePixelRatio||1;
+c.width=W*d;c.height=H*d;c.style.width=W+&#x27;px&#x27;;c.style.height=H+&#x27;px&#x27;;x.scale(d,d);
+var FW=210,BW=190,F=&#x27;system-ui,&quot;Segoe UI&quot;,sans-serif&#x27;;
+function ms(k){var r=Math.sin(k*12.9898+3.1)*43758.5453;r=r-Math.floor(r);return (k%6===4)?17+r*3:6+r*6;}
+function legend(){x.font=&#x27;600 26px &#x27;+F;x.textBaseline=&#x27;middle&#x27;;
+x.fillStyle=&#x27;#7B5CD6&#x27;;x.fillRect(0,16,28,28);x.fillStyle=&#x27;#14182B&#x27;;x.fillText(&#x27;coube nos 13,9 ms&#x27;,40,31);
+x.fillStyle=&#x27;#E8735A&#x27;;x.fillRect(330,16,28,28);x.fillStyle=&#x27;#14182B&#x27;;x.fillText(&#x27;estourou: quadro perdido, imagem atrasa&#x27;,370,31);}
+function f(t){x.clearRect(0,0,W,H);legend();
+var p=t*0.1,off=p%FW,k0=Math.floor(p/FW);
+x.save();x.beginPath();x.rect(0,70,W,230);x.clip();
+for(var j=-1;j&lt;10;j++){var k=k0+j,X=j*FW-off,m=ms(k),w=m/13.9*BW,over=m&gt;13.9;
+x.strokeStyle=&#x27;#C9C6D9&#x27;;x.lineWidth=2;x.strokeRect(X,96,BW,96);
+x.fillStyle=over?&#x27;#E8735A&#x27;:&#x27;#7B5CD6&#x27;;x.fillRect(X+4,104,Math.max(0,w-8),80);
+x.fillStyle=&#x27;#14182B&#x27;;x.fillRect(X+BW+8,84,4,120);
+if(over){x.fillStyle=&#x27;#8A3220&#x27;;x.font=&#x27;600 26px &#x27;+F;x.textBaseline=&#x27;alphabetic&#x27;;x.fillText(&#x27;quadro perdido&#x27;,X,240);}}
+x.restore();
+x.fillStyle=&#x27;#6B6F80&#x27;;x.font=&#x27;24px &#x27;+F;x.textBaseline=&#x27;alphabetic&#x27;;x.fillText(&#x27;cada caixa = 13,9 ms · cada barra preta = a tela troca de imagem&#x27;,0,292);
+requestAnimationFrame(f);}
+requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-pilha"><section id="m1-pilha" data-transition="fade">
+<div class="head">
+<p class="eyebrow">A pilha</p>
+<h2>A-Frame é three.js com HTML por cima</h2>
+</div>
+<div class="col" style="gap:12px">
+<div class="layer rise" style="--i:3;background:#5B3FC4"><p class="name">A-Frame</p><p class="what">Tags HTML e componentes</p></div>
+<div class="layer rise" style="--i:2;background:#2E2A5C"><p class="name">three.js</p><p class="what">Grafo de cena, malhas, materiais</p></div>
+<div class="layer rise" style="--i:1;background:#1F2240"><p class="name">WebGL</p><p class="what">Pipeline gráfico na GPU</p></div>
+<div class="layer rise" style="--i:0;background:#14182B"><p class="name">WebXR</p><p class="what">Pose, controles, mãos, VR e AR</p></div>
+</div>
+<p class="muted" style="font-size:30px">No Quest: só abrir um link HTTPS</p>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-codigo"><section id="m1-codigo" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Primeira página</p>
+<h2>Uma cena XR em dez linhas</h2>
+</div>
+<div style="display:grid;grid-template-columns:1100px 1fr;gap:48px">
+<div class="code rise" style="--i:0"><p class="src"><span class="k">&lt;script</span> src="aframe.min.js"<span class="k">&gt;&lt;/script&gt;</span><br><span class="k">&lt;a-scene&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position="0 1 -2" color="#4CC3D9"<span class="k">&gt;&lt;/a-box&gt;</span><br>&#160;&#160;<span class="k">&lt;a-sphere</span> position="1 1.2 -3" radius="0.5"<span class="k">&gt;&lt;/a-sphere&gt;</span><br>&#160;&#160;<span class="k">&lt;a-plane</span> rotation="-90 0 0" width="10" height="10"<span class="k">&gt;&lt;/a-plane&gt;</span><br>&#160;&#160;<span class="k">&lt;a-sky</span> color="#ECECEC"<span class="k">&gt;&lt;/a-sky&gt;</span><br><span class="k">&lt;/a-scene&gt;</span></p></div>
+<div class="col">
+<p class="muted rise" style="--i:1;font-size:30px"><b>a-scene</b>: câmera, luz e botão VR prontos</p>
+<p class="muted rise" style="--i:2;font-size:30px"><b>position</b>: metros<br><b>rotation</b>: graus</p>
+<p class="muted rise" style="--i:3;font-size:30px"><b>Ctrl + Alt + I</b>: inspetor</p>
+</div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m1-escala"><section id="m1-escala" class="accent" data-transition="fade">
+<p class="eyebrow rise" style="--i:0">A regra de ouro</p>
+<h1 class="huge grow" style="--i:1">1 unidade = 1 metro</h1>
+<p class="sub rise" style="--i:3">Mesa de 3 m no headset parece um prédio</p>
+
+</section>
+</template>
+<template data-id="m1-exercicio"><section id="m1-exercicio" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Prática · 50 min</p>
+<h2>Monte uma sala em escala real</h2>
+</div>
+<div class="split">
+<div class="col">
+<p class="pill">cena.html · editor + navegador</p>
+<ol class="steps">
+<li>Chão de 10 × 10 m</li>
+<li>Mesa com tampo a 0,75 m</li>
+<li>Caixa, esfera e cilindro</li>
+<li>Céu e duas luzes</li>
+</ol>
+<p class="tag">Parece real? Objetos apoiados ou flutuando?</p>
+</div>
+<div class="col" style="gap:16px">
+<img class="shot grow" style="--i:1;width:760px;height:428px" src="img/m1-sala.png" alt="Solução do exercício: mesa marrom com cubo azul, esfera vermelha e cilindro amarelo, cubo lilás ao fundo e contador de FPS no canto">
+<p class="caption">Onde chegar: modulo1/solucao.html</p>
+</div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 1</p>
+
+</section>
+</template>
+<template data-id="m2-titulo"><section id="m2-titulo" class="dark" data-transition="push">
+<p class="eyebrow rise" style="--i:0">Aula 2 · 2h</p>
+<h1 class="rise" style="--i:1">Componentes e interação</h1>
+<p class="sub rise" style="--i:2">Código próprio, laser, mãos e locomoção</p>
+
+</section>
+</template>
+<template data-id="m2-ecs"><section id="m2-ecs" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Entidade-componente-sistema</p>
+<h2>Comportamento por composição, não por herança</h2>
+</div>
+<div class="grid3">
+<div class="card rise" style="--i:0"><h3>Entidade</h3><p class="body">Contêiner vazio no grafo de cena</p></div>
+<div class="card rise" style="--i:1"><h3>Componente</h3><p class="body">Dados + comportamento, como atributo HTML</p></div>
+<div class="card rise" style="--i:2"><h3>Sistema</h3><p class="body">Lógica global por tipo de componente</p></div>
+</div>
+<div class="code rise" style="--i:3;padding:32px 40px"><p class="src" style="font-size:28px"><span class="k">&lt;a-entity</span><br>&#160;&#160;geometry="primitive: box"<br>&#160;&#160;material="color: #4CC3D9"<br>&#160;&#160;<span class="s">girar="velocidade: 90"</span><span class="k">&gt;&lt;/a-entity&gt;</span></p></div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m2-componente"><section id="m2-componente" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Anatomia de um componente</p>
+<h2>schema, init e tick</h2>
+</div>
+<div style="display:grid;grid-template-columns:1100px 1fr;gap:48px">
+<div class="code rise" style="--i:0"><p class="src small">AFRAME.registerComponent(<span class="s">'girar'</span>, {<br>&#160;&#160;<span class="k">schema</span>: {<br>&#160;&#160;&#160;&#160;velocidade: { default: 45 } <span class="cm">// graus/s</span><br>&#160;&#160;},<br>&#160;&#160;<span class="k">init</span>: function () {<br>&#160;&#160;&#160;&#160;<span class="cm">// roda uma vez, ao anexar</span><br>&#160;&#160;},<br>&#160;&#160;<span class="k">tick</span>: function (t, dt) {<br>&#160;&#160;&#160;&#160;var rad = THREE.MathUtils.degToRad(<br>&#160;&#160;&#160;&#160;&#160;&#160;this.data.velocidade);<br>&#160;&#160;&#160;&#160;this.el.object3D.rotation.y += rad * dt / 1000;<br>&#160;&#160;}<br>});</p></div>
+<div class="col">
+<p class="muted rise" style="--i:1;font-size:30px"><b>schema</b>: dados do HTML</p>
+<p class="muted rise" style="--i:2;font-size:30px"><b>init</b>: uma vez</p>
+<p class="muted rise" style="--i:3;font-size:30px"><b>tick</b>: todo quadro, com <b>dt</b></p>
+<p class="muted rise" style="--i:4;font-size:30px"><b>object3D</b>: objeto do three.js</p>
+</div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m2-dt"><section id="m2-dt" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Pergunta</p>
+<h2>Girar 1 grau por quadro: qual a velocidade?</h2>
+</div>
+<div class="grid2">
+<div class="stat rise" style="--i:0"><p class="num">72 °/s</p><p class="muted">no Quest a 72 Hz</p></div>
+<div class="stat alt rise" style="--i:1"><p class="num">120 °/s</p><p class="muted">no mesmo Quest a 120 Hz</p></div>
+</div>
+<iframe class="embed" style="position:absolute;left:128px;top:600px;width:1664px;height:310px" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var W=1664,H=310,c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),d=window.devicePixelRatio||1;
+c.width=W*d;c.height=H*d;c.style.width=W+&#x27;px&#x27;;c.style.height=H+&#x27;px&#x27;;x.scale(d,d);
+var F=&#x27;system-ui,&quot;Segoe UI&quot;,sans-serif&#x27;;
+var S=[{cx:277,col:&#x27;#7B5CD6&#x27;,a:&#x27;1° por quadro · 72 Hz&#x27;,b:&#x27;= 72 °/s&#x27;},{cx:832,col:&#x27;#E8735A&#x27;,a:&#x27;1° por quadro · 120 Hz&#x27;,b:&#x27;= 120 °/s&#x27;},{cx:1387,col:&#x27;#14182B&#x27;,a:&#x27;velocidade × dt&#x27;,b:&#x27;72 °/s em qualquer Hz&#x27;}];
+function spin(s,deg){var cy=110,r=90,a=deg*Math.PI/180;
+x.strokeStyle=&#x27;#E2DED3&#x27;;x.lineWidth=10;x.beginPath();x.arc(s.cx,cy,r,0,Math.PI*2);x.stroke();
+x.strokeStyle=s.col;x.lineWidth=14;x.lineCap=&#x27;round&#x27;;x.beginPath();x.moveTo(s.cx,cy);x.lineTo(s.cx+Math.cos(a-Math.PI/2)*r,cy+Math.sin(a-Math.PI/2)*r);x.stroke();
+x.fillStyle=s.col;x.beginPath();x.arc(s.cx,cy,12,0,Math.PI*2);x.fill();
+x.textAlign=&#x27;center&#x27;;x.fillStyle=&#x27;#14182B&#x27;;x.font=&#x27;600 28px &#x27;+F;x.fillText(s.a,s.cx,250);
+x.fillStyle=&#x27;#4A4E63&#x27;;x.font=&#x27;26px &#x27;+F;x.fillText(s.b,s.cx,290);}
+function f(t){x.clearRect(0,0,W,H);var sec=t/1000;
+spin(S[0],Math.floor(sec*72));spin(S[1],Math.floor(sec*120));spin(S[2],sec*72);
+requestAnimationFrame(f);}
+requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m2-threejs"><section id="m2-threejs" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Ponte com a disciplina</p>
+<h2>Cada tag vira um objeto do three.js</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 600px;gap:48px">
+<table class="rise" style="--i:0">
+<tr><th style="width:45%;text-align:left">A-Frame</th><th style="width:55%;text-align:left">three.js / CG</th></tr>
+<tr><td>a-entity</td><td>Object3D (nó do grafo de cena)</td></tr>
+<tr><td>geometry</td><td>BufferGeometry (vértices)</td></tr>
+<tr><td>material</td><td>MeshStandardMaterial (PBR)</td></tr>
+<tr><td>position, rotation, scale</td><td>Matriz de modelo local</td></tr>
+<tr><td>Entidade dentro de entidade</td><td>Hierarquia de transformações</td></tr>
+</table>
+<div class="card warn rise" style="--i:2;gap:20px"><h3>Cuidado</h3><p class="body">HTML <b>rotation</b>: <b>graus</b></p><p class="body"><b>object3D.rotation</b>: <b>radianos</b></p><p class="muted" style="font-size:28px">90 rad ≈ 14 voltas</p></div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m2-hierarquia"><section id="m2-hierarquia" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Hierarquia de transformações</p>
+<h2>Move o pai, os filhos vão junto</h2>
+</div>
+<div class="code rise" style="--i:0;position:absolute;left:128px;top:340px;width:700px;box-sizing:border-box"><p class="src small"><span class="k">&lt;a-entity</span> id="mesa"<br>&#160;&#160;<span class="s">position</span>="0 0 -0.5"<span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> ... <span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-sphere</span> ... <span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-cylinder</span> ... <span class="k">&gt;</span><br><span class="k">&lt;/a-entity&gt;</span></p></div>
+<p class="lead rise" style="--i:1;position:absolute;left:128px;top:720px;width:700px">Filho = matriz do pai × matriz local</p>
+<iframe class="embed" style="position:absolute;left:892px;top:320px;width:900px;height:580px" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var W=900,H=580,c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),d=window.devicePixelRatio||1;
+c.width=W*d;c.height=H*d;c.style.width=W+&#x27;px&#x27;;c.style.height=H+&#x27;px&#x27;;x.scale(d,d);
+var F=&#x27;system-ui,&quot;Segoe UI&quot;,sans-serif&#x27;;
+function f(t){var s=t/1000;x.clearRect(0,0,W,H);
+x.fillStyle=&#x27;#FFFDF8&#x27;;x.strokeStyle=&#x27;#E2DED3&#x27;;x.lineWidth=2;x.beginPath();x.rect(1,1,W-2,H-2);x.fill();x.stroke();
+x.fillStyle=&#x27;#7BC8A4&#x27;;x.fillRect(0,470,W,110);
+var tx=450+Math.sin(s*0.9)*190,ang=Math.sin(s*0.6)*0.14;
+x.save();x.translate(tx,470);x.rotate(ang);
+x.strokeStyle=&#x27;#E8735A&#x27;;x.lineWidth=4;x.beginPath();x.moveTo(0,0);x.lineTo(70,0);x.moveTo(0,0);x.lineTo(0,-70);x.stroke();
+x.fillStyle=&#x27;#5C3A1A&#x27;;x.fillRect(-170,-215,18,215);x.fillRect(152,-215,18,215);
+x.fillStyle=&#x27;#8B5A2B&#x27;;x.fillRect(-190,-232,380,18);
+x.fillStyle=&#x27;#4CC3D9&#x27;;x.fillRect(-140,-312,80,80);
+x.fillStyle=&#x27;#EF2D5E&#x27;;x.beginPath();x.arc(0,-272,40,0,Math.PI*2);x.fill();
+x.fillStyle=&#x27;#FFC65D&#x27;;x.fillRect(80,-300,60,68);x.beginPath();x.ellipse(110,-300,30,9,0,0,Math.PI*2);x.fill();
+x.restore();
+x.fillStyle=&#x27;#14182B&#x27;;x.font=&#x27;600 28px &#x27;+F;x.textAlign=&#x27;left&#x27;;x.fillText(&#x27;mesa.position e rotation mudam&#x27;,32,52);
+x.fillStyle=&#x27;#4A4E63&#x27;;x.font=&#x27;26px &#x27;+F;x.fillText(&#x27;caixa, esfera e cilindro nem foram tocados&#x27;,32,92);
+x.fillStyle=&#x27;#8A3220&#x27;;x.font=&#x27;24px &#x27;+F;x.fillText(&#x27;eixos laranja: origem local da mesa&#x27;,32,548);
+requestAnimationFrame(f);}
+requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m2-gltf"><section id="m2-gltf" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Modelos 3D</p>
+<h2>glTF: o formato padrão para levar 3D à web</h2>
+</div>
+<div class="grid2" style="gap:48px">
+<div class="col">
+<div class="code rise" style="--i:0;padding:32px 40px"><p class="src small"><span class="k">&lt;a-asset-item</span> id="pato"<br>&#160;&#160;src="Duck.glb"<span class="k">&gt;&lt;/a-asset-item&gt;</span><br><br><span class="k">&lt;a-entity</span> gltf-model="#pato"<br>&#160;&#160;scale="0.1 0.1 0.1"<span class="k">&gt;&lt;/a-entity&gt;</span></p></div>
+<div class="stat rise" style="--i:2"><p class="num">4.212</p><p class="muted">triângulos no pato, desenhados 2× por quadro</p></div>
+</div>
+<div class="col" style="gap:16px">
+<img class="shot grow" style="--i:1;width:760px;height:428px" src="img/m2-pato.png" alt="Cena da Aula 2: pato amarelo sobre a mesa, cubo azul, esfera vermelha, torus knot listrado e o texto Pato: 4212 triângulos">
+<p class="caption">modulo2/solucao.html · confira a escala em metros</p>
+</div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m2-exercicio"><section id="m2-exercicio" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Exercício · 45 min</p>
+<h2>Seus primeiros componentes</h2>
+</div>
+<div class="split" style="grid-template-columns:1fr 640px">
+<div class="col">
+<p class="pill">modulo2/exercicio.html</p>
+<ol class="steps">
+<li>Complete o tick do girar</li>
+<li>aramado: wireframe ao clicar</li>
+<li>Pato sobre a mesa, girando</li>
+<li>Esfera subindo e descendo</li>
+</ol>
+</div>
+<div class="card dk rise" style="--i:1;padding:48px;gap:20px"><h3>Terminou?</h3><p class="body">Shader próprio</p><p class="body">Contar triângulos do pato</p></div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-raycast"><section id="m3-raycast" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Apontar</p>
+<h2>O laser é o picking da disciplina</h2>
+</div>
+<iframe class="embed" style="position:absolute;left:128px;top:320px;width:1664px;height:390px" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var W=1664,H=390,c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),d=window.devicePixelRatio||1;
+c.width=W*d;c.height=H*d;c.style.width=W+&#x27;px&#x27;;c.style.height=H+&#x27;px&#x27;;x.scale(d,d);
+var F=&#x27;system-ui,&quot;Segoe UI&quot;,sans-serif&#x27;,O={x:170,y:190},B={x0:1000,y0:90,x1:1180,y1:270},S={x:640,y:300,r:42};
+function rr(px,py,w,h,r){x.beginPath();x.moveTo(px+r,py);x.arcTo(px+w,py,px+w,py+h,r);x.arcTo(px+w,py+h,px,py+h,r);x.arcTo(px,py+h,px,py,r);x.arcTo(px,py,px+w,py,r);x.closePath();}
+function hitBox(dx,dy){var t0=(B.x0-O.x)/dx,t1=(B.x1-O.x)/dx,tmin=Math.min(t0,t1),tmax=Math.max(t0,t1);
+var u0=(B.y0-O.y)/dy,u1=(B.y1-O.y)/dy;if(dy===0){if(O.y&lt;B.y0||O.y&gt;B.y1)return -1;}else{tmin=Math.max(tmin,Math.min(u0,u1));tmax=Math.min(tmax,Math.max(u0,u1));}
+return (tmax&gt;=tmin&amp;&amp;tmax&gt;0)?tmin:-1;}
+function f(ms){var s=ms/1000,th=Math.sin(s*1.1)*0.25,dx=Math.cos(th),dy=Math.sin(th);
+x.clearRect(0,0,W,H);
+var t=hitBox(dx,dy),hit=t&gt;0,L=hit?t:(1640-O.x)/dx;
+x.fillStyle=&#x27;#C9C6D9&#x27;;x.beginPath();x.arc(S.x,S.y,S.r,0,Math.PI*2);x.fill();
+x.strokeStyle=&#x27;#E8735A&#x27;;x.lineWidth=6;x.setLineDash([18,12]);x.beginPath();x.moveTo(O.x,O.y);x.lineTo(O.x+dx*L,O.y+dy*L);x.stroke();x.setLineDash([]);
+var g=hit?12:0;x.fillStyle=hit?&#x27;#5B3FC4&#x27;:&#x27;#B7A6F5&#x27;;x.fillRect(B.x0-g,B.y0-g,B.x1-B.x0+2*g,B.y1-B.y0+2*g);
+if(hit){x.fillStyle=&#x27;#E8735A&#x27;;x.beginPath();x.arc(O.x+dx*L,O.y+dy*L,14,0,Math.PI*2);x.fill();}
+x.fillStyle=&#x27;#14182B&#x27;;rr(30,150,140,80,40);x.fill();
+x.font=&#x27;26px &#x27;+F;x.textAlign=&#x27;center&#x27;;x.fillStyle=&#x27;#4A4E63&#x27;;
+x.fillText(&#x27;origem do raio&#x27;,100,270);x.fillText(&#x27;fora de objects: ignorado&#x27;,S.x,S.y+S.r+40);
+x.font=&#x27;600 28px &#x27;+F;x.fillStyle=hit?&#x27;#5B3FC4&#x27;:&#x27;#6B6F80&#x27;;
+x.fillText(hit?&#x27;1ª interseção: recebe mouseenter&#x27;:&#x27;nada na mira: nenhum evento&#x27;,1090,48);
+requestAnimationFrame(f);}
+requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<div style="position:absolute;left:128px;top:750px;width:1664px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<p class="rise" style="--i:1;font-size:28px"><b>mouseenter</b> / <b>mouseleave</b></p>
+<p class="rise" style="--i:2;font-size:28px"><b>click</b>: gatilho, pinça, mouse</p>
+<p class="rise" style="--i:3;font-size:28px"><b>objects: .interativo</b></p>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-metaforas"><section id="m3-metaforas" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Metáforas de interação</p>
+<h2>Pegar de longe ou pegar com a mão?</h2>
+</div>
+<div class="grid2">
+<div class="card rise" style="--i:0;padding:48px;gap:20px"><h3>“Mágica”</h3><p class="body">Laser + grip: alcança longe, sem sair do lugar</p><p class="mono" style="font-size:24px;color:#5B3FC4">agarrar-laser</p></div>
+<div class="card rise" style="--i:1;padding:48px;gap:20px"><h3>“Realista”</h3><p class="body">Mão + pinça: intuitivo, até onde o braço alcança</p><p class="mono" style="font-size:24px;color:#5B3FC4">hand-tracking-grab-controls</p></div>
+</div>
+<p class="rise" style="--i:2">Nas duas: <b>feedback imediato</b> ao apontar</p>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-controles"><section id="m3-controles" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Mapa de entradas</p>
+<h2>Cada botão vira um evento na entidade</h2>
+</div>
+<table class="rise" style="--i:0">
+<tr><th style="width:26%;text-align:left">Entrada</th><th style="width:38%;text-align:left">Evento do A-Frame</th><th style="width:36%;text-align:left">Uso neste curso</th></tr>
+<tr><td>Gatilho</td><td>triggerdown, click</td><td>Trocar cor, teletransporte</td></tr>
+<tr><td>Grip (lateral)</td><td>gripdown, gripup</td><td>Pegar com o laser</td></tr>
+<tr><td>Analógico esquerdo</td><td>thumbstickmoved</td><td>Movimento contínuo</td></tr>
+<tr><td>Analógico direito</td><td>thumbstickmoved</td><td>Giro em passos de 30°</td></tr>
+<tr><td>Pinça (mão)</td><td>pinchstarted, pinchended</td><td>Pegar com a mão</td></tr>
+</table>
+<p class="muted rise" style="--i:1;font-size:30px">No init: <b>this.el.addEventListener('gripdown', …)</b></p>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-exercicio"><section id="m3-exercicio" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Exercício · 25 min</p>
+<h2>Objetos que se deixam pegar</h2>
+</div>
+<div class="split">
+<div class="col">
+<p class="pill">modulo3/interacao-exercicio.html</p>
+<ol class="steps">
+<li>Realce ao apontar: realcar</li>
+<li>Grip: agarrar-laser + grabbable</li>
+<li>Mão: hand-tracking-grab-controls</li>
+</ol>
+<p class="tag">No headset: laser, depois a mão. Mais natural? Mais preciso?</p>
+</div>
+<div class="col" style="gap:16px">
+<img class="shot grow" style="--i:1;width:760px;height:428px" src="img/m3-interacao.png" alt="Solução do exercício: três cubos coloridos sobre a mesa e a legenda Gatilho: cor, Grip: pegar, Pinça: pegar com a mão">
+<p class="caption">Onde chegar: modulo3/interacao-solucao.html</p>
+</div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-enjoo"><section id="m3-enjoo" class="accent" data-transition="fade">
+<p class="eyebrow rise" style="--i:0">Cybersickness</p>
+<h1 class="statement rise" style="--i:1">O olho diz que você anda. O ouvido diz que você está parado.</h1>
+<p class="sub rise" style="--i:3">Conflito visual-vestibular: principal causa de enjoo</p>
+
+</section>
+</template>
+<template data-id="m3-teleporte"><section id="m3-teleporte" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Locomoção, vista de cima</p>
+<h2>Saltar ou deslizar pelo mesmo circuito</h2>
+</div>
+<iframe class="embed" style="position:absolute;left:128px;top:330px;width:1664px;height:580px" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+var W=1664,H=580,c=document.getElementById(&#x27;c&#x27;),x=c.getContext(&#x27;2d&#x27;),d=window.devicePixelRatio||1;
+c.width=W*d;c.height=H*d;c.style.width=W+&#x27;px&#x27;;c.style.height=H+&#x27;px&#x27;;x.scale(d,d);
+var F=&#x27;system-ui,&quot;Segoe UI&quot;,sans-serif&#x27;,PW=800,PH=480;
+var P=[[110,400],[300,300],[160,190],[430,130],[680,90]];
+var PIL=[[230,370],[360,200],[560,170]];
+function rr(px,py,w,h,r){x.beginPath();x.moveTo(px+r,py);x.arcTo(px+w,py,px+w,py+h,r);x.arcTo(px+w,py+h,px,py+h,r);x.arcTo(px,py+h,px,py,r);x.arcTo(px,py,px+w,py,r);x.closePath();}
+function panel(ox){x.fillStyle=&#x27;#7BC8A4&#x27;;rr(ox,0,PW,PH,18);x.fill();
+x.fillStyle=&#x27;#14182B&#x27;;x.fillRect(ox+640,60,80,60);
+PIL.forEach(function(p){x.fillStyle=&#x27;#4CC3D9&#x27;;x.beginPath();x.arc(ox+p[0],p[1],22,0,Math.PI*2);x.fill();});}
+function avatar(ox,px,py,ang){x.save();x.translate(ox+px,py);x.rotate(ang);
+x.fillStyle=&#x27;rgba(91,63,196,0.25)&#x27;;x.beginPath();x.moveTo(0,0);x.arc(0,0,70,-0.5,0.5);x.closePath();x.fill();
+x.fillStyle=&#x27;#5B3FC4&#x27;;x.beginPath();x.arc(0,0,20,0,Math.PI*2);x.fill();x.restore();}
+function seg(i){return [P[i%P.length],P[(i+1)%P.length]];}
+function f(ms){var s=ms/1000;x.clearRect(0,0,W,H);panel(0);panel(864);
+var T=2.4,i=Math.floor(s/T),u=(s%T)/T,sg=seg(i),a=sg[0],b=sg[1],ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+var at=u&lt;0.45?a:b;
+if(u&lt;0.45){x.strokeStyle=&#x27;#E8735A&#x27;;x.lineWidth=5;x.setLineDash([14,10]);x.beginPath();x.moveTo(a[0],a[1]);x.quadraticCurveTo((a[0]+b[0])/2,(a[1]+b[1])/2-90,b[0],b[1]);x.stroke();x.setLineDash([]);
+x.strokeStyle=&#x27;#E8735A&#x27;;x.lineWidth=5;x.beginPath();x.arc(b[0],b[1],28,0,Math.PI*2);x.stroke();}
+avatar(0,at[0],at[1],ang);
+var L=0,segs=[];for(var k=0;k&lt;P.length;k++){var p=P[k],q=P[(k+1)%P.length],l=Math.hypot(q[0]-p[0],q[1]-p[1]);segs.push(l);L+=l;}
+var dd=(s*120)%L,k2=0;while(dd&gt;segs[k2]){dd-=segs[k2];k2++;}
+var p2=P[k2],q2=P[(k2+1)%P.length],r=dd/segs[k2];
+avatar(864,p2[0]+(q2[0]-p2[0])*r,p2[1]+(q2[1]-p2[1])*r,Math.atan2(q2[1]-p2[1],q2[0]-p2[0]));
+x.textAlign=&#x27;left&#x27;;x.fillStyle=&#x27;#14182B&#x27;;x.font=&#x27;600 30px &#x27;+F;x.fillText(&#x27;Teletransporte&#x27;,0,530);x.fillText(&#x27;Movimento contínuo&#x27;,864,530);
+x.fillStyle=&#x27;#4A4E63&#x27;;x.font=&#x27;26px &#x27;+F;x.fillText(&#x27;aponta, salta: sem movimento visto&#x27;,0,570);x.fillText(&#x27;a visão desliza, o corpo fica parado&#x27;,864,570);
+requestAnimationFrame(f);}
+requestAnimationFrame(f);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-locomocao"><section id="m3-locomocao" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Locomoção</p>
+<h2>Andar mais longe do que a sala permite</h2>
+</div>
+<table class="rise" style="--i:0">
+<tr><th style="width:24%;text-align:left">Técnica</th><th style="width:44%;text-align:left">Como funciona</th><th style="width:16%;text-align:left">Conforto</th><th style="width:16%;text-align:left">Presença</th></tr>
+<tr><td>Andar de verdade</td><td>Dentro do limite da sala</td><td>Alto</td><td>Alta</td></tr>
+<tr><td>Teletransporte</td><td>Aponta e aparece</td><td>Alto</td><td>Média</td></tr>
+<tr><td>Giro em passos</td><td>Saltos de 30°</td><td>Alto</td><td>Média</td></tr>
+<tr><td>Movimento contínuo</td><td>Analógico, deslize suave</td><td>Baixo</td><td>Alta</td></tr>
+</table>
+<p class="muted rise" style="--i:1;font-size:30px">Prontos em <b>js/componentes.js</b></p>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="m3-mista"><section id="m3-mista" data-transition="fade">
+<div class="head">
+<p class="eyebrow">Realidade mista no Quest 3S</p>
+<h2>O virtual em cima da sala de aula</h2>
+</div>
+<div class="split" style="grid-template-columns:760px 1fr">
+<div class="col" style="gap:16px">
+<img class="shot grow" style="--i:0;width:760px;height:428px" src="img/m3-mista.png" alt="Cena de realidade mista vista no computador: vaso vermelho com planta verde sobre o chão virtual">
+<p class="pill">modulo3/realidade-mista.html · botão AR</p>
+</div>
+<div class="col" style="gap:16px">
+<div class="card rise" style="--i:1;padding:28px 36px;gap:8px"><h3>Passthrough</h3><p class="body">Câmeras mostram a sala</p></div>
+<div class="card rise" style="--i:2;padding:28px 36px;gap:8px"><h3>Hit-test</h3><p class="body">Raio contra superfícies reais</p></div>
+<div class="card rise" style="--i:3;padding:28px 36px;gap:8px"><h3>O que falta</h3><p class="body">Luz e oclusão não batem</p></div>
+</div>
+</div>
+<p class="foot">Minicurso XR com A-Frame · Aula 2</p>
+
+</section>
+</template>
+<template data-id="fim"><section id="fim" class="dark cover" data-transition="fade">
+<div class="head" style="gap:24px">
+<p class="eyebrow rise" style="--i:0">Para continuar</p>
+<h1 class="rise" style="--i:1">Perguntas?</h1>
+</div>
+<div class="grid2" style="gap:48px">
+<div class="col rise" style="--i:2;gap:12px">
+<p class="eyebrow" style="font-size:24px;letter-spacing:0;text-transform:none">Leituras</p>
+<p class="sub" style="font-size:28px">Tori e Hounsell (org.), <i>Introdução a Realidade Virtual e Aumentada</i>, SBC, 2020</p>
+<p class="sub" style="font-size:28px">Jerald, <i>The VR Book</i>, ACM Books, 2015</p>
+<p class="sub" style="font-size:28px">LaValle, <i>Virtual Reality</i>, Cambridge, 2023</p>
+</div>
+<div class="col rise" style="--i:3;gap:12px">
+<p class="eyebrow" style="font-size:24px;letter-spacing:0;text-transform:none">Documentação</p>
+<p class="sub" style="font-size:28px">aframe.io/docs</p>
+<p class="sub" style="font-size:28px">threejs.org/docs</p>
+<p class="sub" style="font-size:28px">w3.org/TR/webxr</p>
+</div>
+</div>
+
+</section>
+</template>
+<script>
+var T=[].slice.call(document.querySelectorAll('template')),stage=document.getElementById('stage'),cur=-1,frags=[],shown=0;
+function fit(){var d=document.documentElement,s=Math.min(d.clientWidth/1920,d.clientHeight/1080);stage.style.transform='scale('+s+') translate(-50%,-50%)';}
+function show(i,fromEnd){i=Math.max(0,Math.min(T.length-1,i));cur=i;stage.innerHTML='';
+  stage.appendChild(T[i].content.cloneNode(true));frags=[].slice.call(stage.querySelectorAll('.fragment'));
+  shown=fromEnd?frags.length:0;frags.forEach(function(f,k){f.classList.toggle('visible',k<shown)});
+  document.getElementById('count').textContent=(i+1)+' / '+T.length;
+  document.getElementById('prog').style.width=((i+1)/T.length*100)+'%';
+  history.replaceState(null,'','#'+(i+1));}
+function next(){if(shown<frags.length){frags[shown++].classList.add('visible');}else if(cur<T.length-1)show(cur+1);}
+function prev(){if(shown>0&&frags.length){frags[--shown].classList.remove('visible');}else if(cur>0)show(cur-1,true);}
+function full(){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+addEventListener('keydown',function(e){var k=e.key;
+  if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();next();}
+  else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){e.preventDefault();prev();}
+  else if(k==='Home')show(0);else if(k==='End')show(T.length-1);else if(k==='f'||k==='F')full();});
+document.addEventListener('click',function(e){if(e.target.closest('#bar'))return;(e.clientX<innerWidth/3?prev:next)();});
+var x0=null;addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;
+  if(Math.abs(dx)>50){e.preventDefault();(dx<0?next:prev)();}});
+document.getElementById('bp').onclick=prev;document.getElementById('bn').onclick=next;document.getElementById('bf').onclick=full;
+function fromHash(){var n=(parseInt(location.hash.slice(1),10)||1)-1;if(n!==cur)show(n);}
+addEventListener('hashchange',fromHash);addEventListener('resize',fit);fit();fromHash();
+</script></body></html>
