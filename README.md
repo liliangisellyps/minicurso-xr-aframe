@@ -10,4 +10,5 @@ O minicurso tem 2 aulas de 2 horas:
 
 ## Slides
 
-[slides/minicurso-xr-aframe-slides.pdf](slides/minicurso-xr-aframe-slides.pdf)
+- **Versão interativa, com as animações:** https://liliangisellyps.github.io/minicurso-xr-aframe/slides/
+- **PDF:** [slides/minicurso-xr-aframe-slides.pdf](slides/minicurso-xr-aframe-slides.pdf)
