@@ -7,3 +7,8 @@ O minicurso tem 2 aulas de 2 horas:
 
 - **Aula 1:** fundamentos de XR e a primeira cena no navegador
 - **Aula 2:** componentes próprios e interação
+
+## Slides
+
+- **Versão interativa, com as animações:** https://liliangisellyps.github.io/minicurso-xr-aframe/slides/
+- **PDF:** [slides/minicurso-xr-aframe-slides.pdf](slides/minicurso-xr-aframe-slides.pdf)
