@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aula 1 · Prática · Minicurso XR com A-Frame</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>/* Minicurso XR com A-Frame · v2 */
+body { font-family: 'IBM Plex Sans', Arial, sans-serif; color: #14182B; }
+
+section {
+  background: #F6F4EF;
+  color: #14182B;
+  padding: 128px 128px 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+section.dark {
+  background: #14182B;
+  color: #F6F4EF;
+  padding: 128px;
+  justify-content: center;
+  gap: 32px;
+}
+section.accent {
+  background: #5B3FC4;
+  color: #F6F4EF;
+  padding: 128px;
+  justify-content: center;
+  gap: 40px;
+}
+section.cover { justify-content: space-between; gap: 0; }
+
+h1 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1.05; }
+h1.huge { font-size: 160px; line-height: 1; }
+h1.statement { font-size: 96px; line-height: 1.1; }
+h2 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 72px; font-weight: 600; line-height: 1.1; }
+h3 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15; }
+p { font-size: 32px; line-height: 1.4; }
+
+.head { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: 24px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #5B3FC4; }
+.dark .eyebrow { font-size: 28px; color: #B7A6F5; }
+.accent .eyebrow { font-size: 28px; color: #E6E3F5; }
+.sub { font-size: 36px; color: #C9C6D9; }
+.accent .sub { font-size: 40px; color: #E6E3F5; }
+.muted { color: #4A4E63; }
+.lead { font-size: 36px; color: #4A4E63; }
+.tag { font-size: 28px; color: #5B3FC4; }
+.tag-strong { font-size: 28px; font-weight: 600; color: #5B3FC4; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 32px; }
+.split { display: grid; grid-template-columns: 1fr 760px; gap: 48px; }
+.col { display: flex; flex-direction: column; gap: 24px; }
+
+.card { display: flex; flex-direction: column; gap: 16px; background: #FFFDF8; border: 1px solid #E2DED3; border-radius: 16px; padding: 40px; }
+.card .body { font-size: 30px; color: #4A4E63; }
+.card.dk { background: #14182B; color: #F6F4EF; border: 1px solid #14182B; }
+.card.dk .body { color: #C9C6D9; }
+.card.dk .tag-strong { color: #B7A6F5; }
+.card.warn { background: #FBE9E4; border: 2px solid #E8735A; }
+.card.warn h3 { color: #8A3220; }
+.card.warn .body { color: #14182B; }
+
+.stat { display: flex; flex-direction: column; gap: 8px; border-top: 6px solid #7B5CD6; padding-top: 32px; }
+.stat.alt { border-top: 6px solid #E8735A; }
+.num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.num.violet { color: #5B3FC4; }
+
+.code { background: #14182B; border-radius: 16px; padding: 40px; }
+.code .src { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 26px; line-height: 1.6; color: #E6E3F5; }
+.code .src.small { font-size: 24px; }
+.k { color: #B7A6F5; }
+.s { color: #F2B8A8; }
+.cm { color: #8A8FA8; }
+
+.pill { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 28px; background: #E6E3F5; color: #2E2A5C; padding: 12px 24px; border-radius: 12px; }
+.mono { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 28px; color: #2E2A5C; }
+.steps { font-size: 32px; line-height: 1.5; color: #4A4E63; }
+.danger { font-size: 28px; font-weight: 600; color: #8A3220; }
+
+.shot { border-radius: 16px; object-fit: cover; box-shadow: 0 12px 40px rgba(20, 24, 43, 0.18); }
+.caption { font-size: 24px; color: #6B6F80; }
+
+.layer { display: grid; grid-template-columns: 420px 1fr; gap: 32px; align-items: center; color: #F6F4EF; border-radius: 12px; padding: 24px 40px; }
+.layer .name { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 600; }
+.layer .what { font-size: 30px; }
+
+table { font-size: 28px; color: #14182B; }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; color: #6B6F80; }
+
+/* Entrada em etapas: o estado final é o normal; a animação só parte de baixo */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes grow {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.rise { animation: rise 600ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+.grow { animation: grow 700ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+
+/* Passos no ritmo da fala (clique) */
+.fragment { opacity: 0; transform: translateY(16px); transition: opacity 400ms ease-out, transform 400ms ease-out; }
+.fragment.visible { opacity: 1; transform: translateY(0); }
+
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0B0E1A;overflow:hidden}
+#stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
+#stage>section{position:absolute;inset:0;width:1920px;height:1080px}
+iframe.embed{border:0;background:transparent;position:absolute}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:8px 12px;
+  font:14px 'IBM Plex Sans',Arial,sans-serif;color:#C9C6D9;opacity:0;transition:opacity .3s}
+body:hover #bar,#bar:focus-within{opacity:1}
+#bar button{background:#14182B;color:#F6F4EF;border:1px solid rgba(246,244,239,.35);border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#bar button:hover{background:#5B3FC4}
+#count{background:#14182B;color:#F6F4EF;border-radius:6px;padding:4px 10px}
+#count{margin-left:auto}
+#prog{position:fixed;left:0;bottom:0;height:3px;background:#5B3FC4;transition:width .3s}
+@media (hover:none){#bar{opacity:1}}
+</style></head><body>
+<div id="stage"></div>
+<div id="prog"></div>
+<div id="bar"><button id="bp" aria-label="Slide anterior">&larr;</button><button id="bn" aria-label="Próximo slide">&rarr;</button>
+<button id="bf">Tela cheia (F)</button><span id="count"></span></div>
+<template data-id="capa"><section id="capa" class="dark">
+<p class="eyebrow rise" style="--i:0">Aula 1 · Prática</p>
+<h1 class="rise" style="--i:1">Exercícios da Aula 1</h1>
+<p class="sub rise" style="--i:2">Cena padrão, modelos GLB, inspetor e hierarquia</p>
+</section>
+</template>
+<template data-id="roteiro"><section id="roteiro">
+<div class="head"><p class="eyebrow">Roteiro</p><h2>Cinco partes</h2></div>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:24px">
+<div class="card rise" style="--i:0;padding:32px"><p class="tag-strong">1</p><h3>Cena padrão</h3><p class="body">Exemplo da documentação</p></div>
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">2</p><h3>Modelo GLB</h3><p class="body">Importar um modelo 3D</p></div>
+<div class="card rise" style="--i:2;padding:32px"><p class="tag-strong">3</p><h3>Inspetor</h3><p class="body">Ctrl + Alt + I e atributos</p></div>
+<div class="card rise" style="--i:3;padding:32px"><p class="tag-strong">4</p><h3>Hierarquia</h3><p class="body">Entidades pai e filho</p></div>
+<div class="card rise" style="--i:4;padding:32px"><p class="tag-strong">5</p><h3>Desafios</h3><p class="body">Para continuar em casa</p></div>
+</div>
+
+</section>
+</template>
+<template data-id="onde"><section id="onde">
+<div class="head"><p class="eyebrow">Onde testar</p><h2>CodePen ou arquivo .html</h2></div>
+<div class="grid2">
+<div class="card rise" style="--i:0;padding:48px"><p class="tag-strong">Em aula</p><h3>codepen.io</h3>
+<ol class="steps" style="padding-left:40px;font-size:30px"><li>Faça <b>login</b> (é obrigatório)</li><li>Create → <b>Pen</b></li><li>Cole o código no painel <b>HTML</b></li><li>O resultado aparece embaixo</li></ol>
+<p class="tag" style="font-size:26px">Limite de 3 arquivos por Pen</p></div>
+<div class="card dk rise" style="--i:1;padding:48px"><p class="tag-strong">No computador</p><h3>Arquivo cena.html</h3>
+<ol class="steps" style="padding-left:40px;font-size:30px;color:#C9C6D9"><li>Cole no seu editor de código favorito</li><li>Salve como <b>cena.html</b></li><li>Dois cliques: abre no Chrome</li><li>Mudou? Salve e aperte <b>F5</b></li></ol></div>
+</div>
+
+</section>
+</template>
+<template data-id="ex1"><section id="ex1">
+<div class="head"><p class="eyebrow">1 · Cena padrão</p><h2>Exemplo da documentação</h2></div>
+<div style="display:grid;grid-template-columns:1fr 760px;gap:48px">
+<div class="col">
+<a class="pill" href="https://aframe.io/docs/1.8.0/introduction/" target="_blank" rel="noopener" style="align-self:flex-start;text-decoration:none;font-size:24px">aframe.io/docs/1.8.0/introduction</a>
+<ol class="steps" style="padding-left:40px">
+<li>Abra a página</li>
+<li>Em <b>Getting Started</b>, copie o código</li>
+<li>Cole no CodePen ou no cena.html</li>
+</ol>
+<p class="tag">Na cena: arrastar o mouse olha em volta, W A S D anda</p>
+</div>
+<img class="shot grow" src="img/docs-aframe.png" style="--i:1;width:760px;height:624px;object-position:top left" alt="Página Introduction da documentação do A-Frame, com o exemplo em Getting Started">
+</div>
+
+</section>
+</template>
+<template data-id="ex1-codigo"><section id="ex1-codigo">
+<div class="head"><p class="eyebrow">1 · Cena padrão</p><h2>Código completo</h2></div>
+<div style="display:grid;grid-template-columns:1260px 1fr;gap:32px;align-items:start">
+<div class="code rise" style="--i:0;padding:32px"><p class="src" style="font-size:18px;white-space:nowrap"><span class="k">&lt;html</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;head</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span> src=<span class="s">"https://aframe.io/releases/1.8.0/aframe.min.js"</span><span class="k">&gt;</span><span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/head</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;body</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-scene</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"-1 0.5 -3"</span> rotation=<span class="s">"0 45 0"</span> color=<span class="s">"#4CC3D9"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-sphere</span> position=<span class="s">"0 1.25 -5"</span> radius=<span class="s">"1.25"</span> color=<span class="s">"#EF2D5E"</span><span class="k">&gt;</span><span class="k">&lt;/a-sphere</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-cylinder</span> position=<span class="s">"1 0.75 -3"</span> radius=<span class="s">"0.5"</span> height=<span class="s">"1.5"</span> color=<span class="s">"#FFC65D"</span><span class="k">&gt;</span><span class="k">&lt;/a-cylinder</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-plane</span> position=<span class="s">"0 0 -4"</span> rotation=<span class="s">"-90 0 0"</span> width=<span class="s">"4"</span> height=<span class="s">"4"</span> color=<span class="s">"#7BC8A4"</span><span class="k">&gt;</span><span class="k">&lt;/a-plane</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-sky</span> color=<span class="s">"#ECECEC"</span><span class="k">&gt;</span><span class="k">&lt;/a-sky</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;/a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/body</span><span class="k">&gt;</span><br><span class="k">&lt;/html</span><span class="k">&gt;</span></p></div>
+<div class="col" style="gap:16px">
+<iframe class="grow" src="cena-padrao.html" style="--i:1;width:372px;height:300px;border:0;border-radius:16px;pointer-events:none;box-shadow:0 12px 40px rgba(20,24,43,.18);background:#ECECEC" title="Cena padrão funcionando"></iframe>
+<p class="caption">Resultado deste código</p>
+</div>
+</div>
+
+</section>
+</template>
+<template data-id="erro-glb"><section id="erro-glb">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>.glb e .gltf</h2></div>
+<div class="grid2">
+<div class="card rise" style="--i:0;padding:48px"><p class="tag-strong">.glb · pasta glTF-Binary · use este</p><h3>Um arquivo só</h3><p class="body">Malha, texturas e animações compactadas dentro dele</p></div>
+<div class="card rise" style="--i:1;padding:48px"><p class="tag-strong" style="color:#6B6F80">.gltf · pasta glTF</p><h3>Vários arquivos</h3><p class="body">Aponta para um .bin e para as imagens das texturas. Se faltar um, o modelo quebra</p></div>
+</div>
+
+</section>
+</template>
+<template data-id="ex2-src"><section id="ex2-src">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>Link Raw ou arquivo baixado?</h2></div>
+<table class="rise" style="--i:0;border-collapse:collapse;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;overflow:hidden"><tr><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Onde você roda</th><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Com o link Raw</th><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Com o .glb baixado</th></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>CodePen</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b style="color:#1E7F5C">Funciona</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">Faça upload do .glb. Limite de 3 arquivos: exclua o CSS e o JS</td></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>Arquivo .html</b><br>com dois cliques</td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b style="color:#1E7F5C">Funciona</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b style="color:#8A3220">Não carrega</b>: o Chrome bloqueia arquivos em file://</td></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>Live Server</b><br>no VS Code</td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b style="color:#1E7F5C">Funciona</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b style="color:#1E7F5C">Funciona</b> com o .glb na mesma pasta</td></tr></table>
+<p class="tag">Na dúvida, use o link Raw: funciona em todos</p>
+
+</section>
+</template>
+<template data-id="ex2-pegar"><section id="ex2-pegar">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>Pegar o link do modelo</h2></div>
+<a class="pill rise" href="https://github.com/KhronosGroupArchives/glTF-Sample-Models/tree/main/2.0" target="_blank" rel="noopener" style="--i:0;align-self:flex-start;text-decoration:none;font-size:24px">github.com/KhronosGroupArchives/glTF-Sample-Models → pasta 2.0</a>
+<div class="grid4">
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">1</p><h3>Modelo</h3><p class="body">Abra a pasta do modelo que você escolheu</p></div>
+<div class="card rise" style="--i:2;padding:32px"><p class="tag-strong">2</p><h3>glTF-Binary</h3><p class="body">Entre na pasta <b>glTF-Binary</b></p></div>
+<div class="card rise" style="--i:3;padding:32px"><p class="tag-strong">3</p><h3>Arquivo</h3><p class="body">Clique no arquivo <b>.glb</b></p></div>
+<div class="card rise" style="--i:4;padding:32px"><p class="tag-strong">4</p><h3>Raw</h3><p class="body">Botão direito em <b>Raw</b> → copiar endereço do link</p></div>
+</div>
+<p class="tag">Sempre a pasta <b>glTF-Binary</b>: é nela que está o arquivo .glb</p>
+
+</section>
+</template>
+<template data-id="ex2-partes"><section id="ex2-partes">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>As três tags do modelo</h2></div>
+<div class="code rise" style="--i:0;padding:28px 32px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-assets</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-asset-item</span> id=<span class="s">"pato"</span><br>&#160;&#160;&#160;&#160;src=<span class="s">"https://raw.githubusercontent.com/KhronosGroupArchives/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb"</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br><span class="k">&lt;/a-assets</span><span class="k">&gt;</span><br><span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#pato"</span> position=<span class="s">"0 0 -3"</span> scale=<span class="s">"0.5 0.5 0.5"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span></p></div>
+<div class="grid3">
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">1</p><h3>a-assets</h3><p class="body">Agrupa os arquivos da cena e carrega todos antes de ela aparecer</p></div>
+<div class="card rise" style="--i:2;padding:32px"><p class="tag-strong">2</p><h3>a-asset-item</h3><p class="body"><b>Um</b> arquivo. <b>id</b>: o nome que você escolhe. <b>src</b>: o link Raw copiado, inteiro, entre aspas</p></div>
+<div class="card rise" style="--i:3;padding:32px"><p class="tag-strong">3</p><h3>a-entity</h3><p class="body">Coloca o modelo na cena, chamando o id com <b>#</b>. Aqui vão position, rotation e scale</p></div>
+</div>
+
+</section>
+</template>
+<template data-id="erro-id"><section id="erro-id">
+<div class="head"><p class="eyebrow">2 · Modelo GLB · Erro comum</p><h2>O mesmo id no a-asset-item e no gltf-model</h2></div>
+<div class="grid2">
+<div class="card warn rise" style="--i:0;padding:32px"><p class="danger">Errado</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-asset-item</span> id=<span class="s">"raposa"</span> src=<span class="s">"Fox.glb"</span><span class="k">&gt;</span><span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br><br><span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#pato"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span></p></div></div>
+<div class="card rise" style="--i:1;padding:32px;background:#E3F3EC;border:2px solid #3AA57A"><p class="danger" style="color:#1E7F5C">Certo</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-asset-item</span> id=<span class="s">"raposa"</span> src=<span class="s">"Fox.glb"</span><span class="k">&gt;</span><span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br><br><span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#raposa"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span></p></div></div>
+</div>
+<p class="tag">No gltf-model o id vai com <b>#</b>. Maiúsculas contam: Pato e pato são ids diferentes</p>
+
+</section>
+</template>
+<template data-id="ex2-codigo"><section id="ex2-codigo">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>Código completo</h2></div>
+<div class="code rise" style="--i:0;padding:28px 32px"><p class="src" style="font-size:18px;line-height:1.5;white-space:nowrap"><span class="k">&lt;html</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;head</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span> src=<span class="s">"https://aframe.io/releases/1.8.0/aframe.min.js"</span><span class="k">&gt;</span><span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/head</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;body</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-scene</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-assets</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-asset-item</span> id=<span class="s">"pato"</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;src=<span class="s">"https://raw.githubusercontent.com/KhronosGroupArchives/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;/a-assets</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#pato"</span> position=<span class="s">"0 0 -3"</span> scale=<span class="s">"0.5 0.5 0.5"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-plane</span> position=<span class="s">"0 0 -4"</span> rotation=<span class="s">"-90 0 0"</span> width=<span class="s">"4"</span> height=<span class="s">"4"</span> color=<span class="s">"#7BC8A4"</span><span class="k">&gt;</span><span class="k">&lt;/a-plane</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-sky</span> color=<span class="s">"#ECECEC"</span><span class="k">&gt;</span><span class="k">&lt;/a-sky</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;/a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/body</span><span class="k">&gt;</span><br><span class="k">&lt;/html</span><span class="k">&gt;</span></p></div>
+<p class="tag">Igual à cena padrão, mais o a-assets e a a-entity do pato</p>
+
+</section>
+</template>
+<template data-id="erro-cena"><section id="erro-cena">
+<div class="head"><p class="eyebrow">2 · Modelo GLB · Erro comum</p><h2>Só uma &lt;a-scene&gt; por página</h2></div>
+<div class="grid2">
+<div class="card warn rise" style="--i:0;padding:32px"><p class="danger">Errado</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> color=<span class="s">"#4CC3D9"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br><span class="k">&lt;/a-scene</span><span class="k">&gt;</span><br><span class="k">&lt;a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-assets</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-asset-item</span> id=<span class="s">"pato"</span> src=<span class="s">"Duck.glb"</span><span class="k">&gt;</span><span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/a-assets</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#pato"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span><br><span class="k">&lt;/a-scene</span><span class="k">&gt;</span></p></div></div>
+<div class="card rise" style="--i:1;padding:32px;background:#E3F3EC;border:2px solid #3AA57A"><p class="danger" style="color:#1E7F5C">Certo</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-assets</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-asset-item</span> id=<span class="s">"pato"</span> src=<span class="s">"Duck.glb"</span><span class="k">&gt;</span><span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/a-assets</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> color=<span class="s">"#4CC3D9"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#pato"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span><br><span class="k">&lt;/a-scene</span><span class="k">&gt;</span></p></div></div>
+</div>
+<p class="tag">Do exemplo do gltf-model, copie só o que está <b>dentro</b> da a-scene</p>
+
+</section>
+</template>
+<template data-id="ex2-pato"><section id="ex2-pato">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>Resultado</h2></div>
+<iframe class="grow" src="modelo-glb.html" style="--i:0;width:1100px;height:560px;border:0;border-radius:16px;pointer-events:none;box-shadow:0 12px 40px rgba(20,24,43,.18);background:#ECECEC" title="Cena com o pato"></iframe>
+<a class="caption" href="https://aframe.io/docs/1.8.0/components/gltf-model.html" target="_blank" rel="noopener">Documentação do gltf-model: aframe.io/docs/1.8.0/components/gltf-model.html</a>
+
+</section>
+</template>
+<template data-id="ex2-tamanho"><section id="ex2-tamanho">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>Ajustar o tamanho com scale</h2></div>
+<p class="lead">Cada modelo vem num tamanho. O scale multiplica: 1,5 m × 0.5 = 75 cm</p>
+<table class="rise" style="--i:1;border-collapse:collapse;background:#FFFDF8;border:1px solid #E2DED3;border-radius:16px;overflow:hidden"><tr><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Modelo</th><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Tamanho no arquivo</th><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Use</th><th style="padding:14px 28px;text-align:left;font-size:22px;letter-spacing:2px;text-transform:uppercase;color:#6B6F80;font-weight:600">Fica com</th></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>Duck</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">1,5 m</td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><span class="mono" style="font-size:26px">scale="0.5 0.5 0.5"</span></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">75 cm</td></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>Fox</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">80 m</td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><span class="mono" style="font-size:26px">scale="0.01 0.01 0.01"</span></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">80 cm</td></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>Lantern</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">25 m</td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><span class="mono" style="font-size:26px">scale="0.1 0.1 0.1"</span></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">2,5 m</td></tr><tr><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><b>Avocado</b></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">6 cm</td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top"><span class="mono" style="font-size:26px">scale="10 10 10"</span></td><td style="padding:16px 28px;border-top:1px solid #E2DED3;vertical-align:top">60 cm</td></tr></table>
+
+</section>
+</template>
+<template data-id="erro-checklist"><section id="erro-checklist">
+<div class="head"><p class="eyebrow">2 · Modelo GLB</p><h2>O modelo não aparece: o que conferir</h2></div>
+<div class="grid2" style="row-gap:24px">
+<div class="card rise" style="--i:0;padding:32px"><h3>F12 → Console</h3><p class="body">O erro em vermelho diz o que falhou</p></div>
+<div class="card rise" style="--i:1;padding:32px"><h3>De onde vem o arquivo</h3><p class="body">Link Raw, ou Live Server para .glb local</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>Tamanho</h3><p class="body">Enorme ou minúsculo: teste outro scale</p></div>
+<div class="card rise" style="--i:3;padding:32px"><h3>Posição e nome</h3><p class="body">Está atrás de você? O src bate com o nome do arquivo?</p></div>
+</div>
+
+</section>
+</template>
+<template data-id="ex3"><section id="ex3">
+<div class="head"><p class="eyebrow">3 · Inspetor</p><h2>Ctrl + Alt + I</h2></div>
+<div class="grid3">
+<div class="card rise" style="--i:0"><h3>Esquerda</h3><p class="body">Lista das entidades: clique para selecionar</p></div>
+<div class="card rise" style="--i:1"><h3>Direita</h3><p class="body">position, rotation, scale: mude e veja na hora</p></div>
+<div class="card rise" style="--i:2"><h3>Na cena</h3><p class="body">Setas: <b style="color:#D9473A">X</b> <b style="color:#3AA57A">Y</b> <b style="color:#3E6FD8">Z</b></p></div>
+</div>
+<div class="card warn rise" style="--i:3;padding:32px 40px"><h3>Não salva no código</h3><p class="body">F5 volta ao original. Achou o valor certo? Copie para o código</p></div>
+<p class="tag">No CodePen: clique na cena antes do atalho</p>
+
+</section>
+</template>
+<template data-id="atributos"><section id="atributos">
+<div class="head"><p class="eyebrow">3 · Atributos</p><h2>position, rotation e scale</h2></div>
+<div class="grid3">
+<div class="stat rise" style="--i:0"><p class="mono">position="0 1.6 -2"</p><h3>Metros</h3><p class="muted">Y para cima · <b>−Z para a frente</b></p></div>
+<div class="stat rise" style="--i:1"><p class="mono">rotation="0 45 0"</p><h3>Graus</h3><p class="muted">Virar para os lados: Y</p></div>
+<div class="stat rise" style="--i:2"><p class="mono">scale="2 2 2"</p><h3>Fator</h3><p class="muted">1 original · 0.5 metade</p></div>
+</div>
+<div class="grid2">
+<p class="muted rise" style="--i:3"><b>width · height · depth</b>: a-box, a-plane</p>
+<p class="muted rise" style="--i:4"><b>radius</b>: a-sphere, a-cylinder</p>
+</div>
+<p class="tag">Sempre x y z, separados por espaço. A position marca o centro do objeto</p>
+
+</section>
+</template>
+<template data-id="hier-conceito"><section id="hier-conceito">
+<div class="head"><p class="eyebrow">4 · Hierarquia</p><h2>Pai e filho</h2></div>
+<div class="code rise" style="--i:0;padding:28px 40px;align-self:flex-start"><p class="src" style="font-size:24px;white-space:nowrap"><span class="k">&lt;a-entity</span> id=<span class="s">"mesa"</span> position=<span class="s">"0 0 -3"</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"0 0.75 0"</span> color=<span class="s">"#8B5A2B"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br><span class="k">&lt;/a-entity</span><span class="k">&gt;</span></p></div>
+<div class="grid3">
+<div class="card rise" style="--i:1;padding:32px"><h3>Filho dentro do pai</h3><p class="body">Uma entidade dentro da outra, no HTML</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>O filho segue o pai</h3><p class="body">Mover, girar ou mudar o scale do pai muda todos os filhos</p></div>
+<div class="card rise" style="--i:3;padding:32px"><h3>Posição relativa</h3><p class="body">Pai em 0 0 -3 e filho em 0 0.75 0: no mundo, o filho fica em 0 0.75 -3</p></div>
+</div>
+
+</section>
+</template>
+<template data-id="hier-codigo"><section id="hier-codigo">
+<div class="head"><p class="eyebrow">4 · Hierarquia</p><h2>Uma mesa com tampo, pernas e uma bola</h2></div>
+<div class="code rise" style="--i:0;padding:28px 32px"><p class="src" style="font-size:18px;line-height:1.5;white-space:nowrap"><span class="k">&lt;a-entity</span> id=<span class="s">"mesa"</span> position=<span class="s">"0 0 -3"</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;animation=<span class="s">"property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"0 0.75 0"</span> width=<span class="s">"1.2"</span> height=<span class="s">"0.05"</span> depth=<span class="s">"0.8"</span> color=<span class="s">"#8B5A2B"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"-0.55 0.36 -0.35"</span> width=<span class="s">"0.05"</span> height=<span class="s">"0.72"</span> depth=<span class="s">"0.05"</span> color=<span class="s">"#5C3A1E"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"0.55 0.36 -0.35"</span> width=<span class="s">"0.05"</span> height=<span class="s">"0.72"</span> depth=<span class="s">"0.05"</span> color=<span class="s">"#5C3A1E"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"-0.55 0.36 0.35"</span> width=<span class="s">"0.05"</span> height=<span class="s">"0.72"</span> depth=<span class="s">"0.05"</span> color=<span class="s">"#5C3A1E"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"0.55 0.36 0.35"</span> width=<span class="s">"0.05"</span> height=<span class="s">"0.72"</span> depth=<span class="s">"0.05"</span> color=<span class="s">"#5C3A1E"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-sphere</span> position=<span class="s">"0 0.875 0"</span> radius=<span class="s">"0.1"</span> color=<span class="s">"#EF2D5E"</span><span class="k">&gt;</span><span class="k">&lt;/a-sphere</span><span class="k">&gt;</span><br><span class="k">&lt;/a-entity</span><span class="k">&gt;</span></p></div>
+<p class="tag">Os filhos não têm rotation própria: giram junto com o pai. Suas posições são medidas a partir dele</p>
+
+</section>
+</template>
+<template data-id="hier-resultado"><section id="hier-resultado">
+<div class="head"><p class="eyebrow">4 · Hierarquia</p><h2>Resultado</h2></div>
+<div style="display:grid;grid-template-columns:1100px 1fr;gap:48px;align-items:start">
+<iframe class="grow" src="hierarquia.html" style="--i:0;width:1100px;height:560px;border:0;border-radius:16px;pointer-events:none;box-shadow:0 12px 40px rgba(20,24,43,.18);background:#ECECEC" title="Mesa girando com os filhos"></iframe>
+<div class="col">
+<p class="tag-strong rise" style="--i:1">Teste no código ou no inspetor</p>
+<p class="muted rise" style="--i:2;font-size:30px">Mude a <b>position</b> do pai: a mesa inteira anda</p>
+<p class="muted rise" style="--i:3;font-size:30px">Mude o <b>scale</b> do pai para 2 2 2: tudo dobra de tamanho</p>
+<p class="muted rise" style="--i:4;font-size:30px">Mude a position de <b>um filho</b>: só ele se move</p>
+</div>
+</div>
+
+</section>
+</template>
+<template data-id="desafios"><section id="desafios">
+<div class="head"><p class="eyebrow">5 · Desafio para casa</p><h2>Uma mesa com dois modelos</h2></div>
+<p class="lead" style="margin-top:-16px">Cada passo continua a cena do passo anterior</p>
+<div class="grid3" style="row-gap:24px">
+<div class="card rise" style="--i:0;padding:28px 32px;gap:10px"><p class="tag-strong">1 · Mesa</p><p class="body">Uma <b>a-entity</b> pai com o tampo e as quatro pernas como filhos, feitos com a primitiva <b>a-box</b> do A-Frame</p></div>
+<div class="card rise" style="--i:1;padding:28px 32px;gap:10px"><p class="tag-strong">2 · Mover a mesa</p><p class="body">Mude a position e o scale do pai, no código ou no inspetor</p></div>
+<div class="card rise" style="--i:2;padding:28px 32px;gap:10px"><p class="tag-strong">3 · Primeiro modelo</p><p class="body">Um GLB em cima do tampo, como filho da mesa</p></div>
+<div class="card rise" style="--i:3;padding:28px 32px;gap:10px"><p class="tag-strong">4 · Segundo modelo</p><p class="body">Outro GLB ao lado, com o mesmo tamanho aparente</p></div>
+<div class="card rise" style="--i:4;padding:28px 32px;gap:10px"><p class="tag-strong">5 · De frente</p><p class="body">Ache no inspetor a rotation de cada modelo e passe para o código</p></div>
+<div class="card rise" style="--i:5;padding:28px 32px;gap:10px"><p class="tag-strong">6 · Fim de tarde</p><p class="body">Céu laranja, uma a-light ambient e uma directional</p></div>
+</div>
+
+</section>
+</template>
+<template data-id="desafio-resultado"><section id="desafio-resultado">
+<div class="head"><p class="eyebrow">5 · Desafio para casa</p><h2>Onde chegar</h2></div>
+<iframe class="grow" src="desafio-solucao.html" style="--i:0;width:1300px;height:640px;align-self:center;border:0;border-radius:16px;pointer-events:none;box-shadow:0 12px 40px rgba(20,24,43,.18);background:#ECECEC" title="Solução do desafio"></iframe>
+</section>
+</template>
+<script>
+var T=[].slice.call(document.querySelectorAll('template')),stage=document.getElementById('stage'),cur=-1,frags=[],shown=0;
+function fit(){var d=document.documentElement,s=Math.min(d.clientWidth/1920,d.clientHeight/1080);stage.style.transform='scale('+s+') translate(-50%,-50%)';}
+function show(i,fromEnd){i=Math.max(0,Math.min(T.length-1,i));cur=i;stage.innerHTML='';
+  stage.appendChild(T[i].content.cloneNode(true));frags=[].slice.call(stage.querySelectorAll('.fragment'));
+  shown=fromEnd?frags.length:0;frags.forEach(function(f,k){f.classList.toggle('visible',k<shown)});
+  document.getElementById('count').textContent=(i+1)+' / '+T.length;
+  document.getElementById('prog').style.width=((i+1)/T.length*100)+'%';
+  history.replaceState(null,'','#'+(i+1));}
+function next(){if(shown<frags.length){frags[shown++].classList.add('visible');}else if(cur<T.length-1)show(cur+1);}
+function prev(){if(shown>0&&frags.length){frags[--shown].classList.remove('visible');}else if(cur>0)show(cur-1,true);}
+function full(){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+addEventListener('keydown',function(e){var k=e.key;
+  if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();next();}
+  else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){e.preventDefault();prev();}
+  else if(k==='Home')show(0);else if(k==='End')show(T.length-1);else if(k==='f'||k==='F')full();});
+document.addEventListener('click',function(e){if(e.target.closest('#bar'))return;(e.clientX<innerWidth/3?prev:next)();});
+var x0=null;addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;
+  if(Math.abs(dx)>50){e.preventDefault();(dx<0?next:prev)();}});
+document.getElementById('bp').onclick=prev;document.getElementById('bn').onclick=next;document.getElementById('bf').onclick=full;
+function fromHash(){var n=(parseInt(location.hash.slice(1),10)||1)-1;if(n!==cur)show(n);}
+addEventListener('hashchange',fromHash);addEventListener('resize',fit);fit();fromHash();
+</script></body></html>
