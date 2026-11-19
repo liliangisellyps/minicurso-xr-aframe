@@ -16,4 +16,5 @@ O minicurso tem 2 aulas de 2 horas:
 ## Aula 1 · Prática
 
 - **Slides dos exercícios:** https://liliangisellyps.github.io/minicurso-xr-aframe/aula1/
+- **PDF:** [aula1/minicurso-xr-aframe-pratica-aula1.pdf](aula1/minicurso-xr-aframe-pratica-aula1.pdf)
 - **Exemplos:** [cena padrão](aula1/cena-padrao.html), [modelo GLB](aula1/modelo-glb.html), [hierarquia](aula1/hierarquia.html)
