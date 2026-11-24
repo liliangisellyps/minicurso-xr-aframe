@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aula 2 · Prática · Minicurso XR com A-Frame</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>/* Minicurso XR com A-Frame · v2 */
+body { font-family: 'IBM Plex Sans', Arial, sans-serif; color: #14182B; }
+
+section {
+  background: #F6F4EF;
+  color: #14182B;
+  padding: 128px 128px 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+section.dark {
+  background: #14182B;
+  color: #F6F4EF;
+  padding: 128px;
+  justify-content: center;
+  gap: 32px;
+}
+section.accent {
+  background: #5B3FC4;
+  color: #F6F4EF;
+  padding: 128px;
+  justify-content: center;
+  gap: 40px;
+}
+section.cover { justify-content: space-between; gap: 0; }
+
+h1 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1.05; }
+h1.huge { font-size: 160px; line-height: 1; }
+h1.statement { font-size: 96px; line-height: 1.1; }
+h2 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 72px; font-weight: 600; line-height: 1.1; }
+h3 { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 600; line-height: 1.15; }
+p { font-size: 32px; line-height: 1.4; }
+
+.head { display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: 24px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #5B3FC4; }
+.dark .eyebrow { font-size: 28px; color: #B7A6F5; }
+.accent .eyebrow { font-size: 28px; color: #E6E3F5; }
+.sub { font-size: 36px; color: #C9C6D9; }
+.accent .sub { font-size: 40px; color: #E6E3F5; }
+.muted { color: #4A4E63; }
+.lead { font-size: 36px; color: #4A4E63; }
+.tag { font-size: 28px; color: #5B3FC4; }
+.tag-strong { font-size: 28px; font-weight: 600; color: #5B3FC4; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 32px; }
+.split { display: grid; grid-template-columns: 1fr 760px; gap: 48px; }
+.col { display: flex; flex-direction: column; gap: 24px; }
+
+.card { display: flex; flex-direction: column; gap: 16px; background: #FFFDF8; border: 1px solid #E2DED3; border-radius: 16px; padding: 40px; }
+.card .body { font-size: 30px; color: #4A4E63; }
+.card.dk { background: #14182B; color: #F6F4EF; border: 1px solid #14182B; }
+.card.dk .body { color: #C9C6D9; }
+.card.dk .tag-strong { color: #B7A6F5; }
+.card.warn { background: #FBE9E4; border: 2px solid #E8735A; }
+.card.warn h3 { color: #8A3220; }
+.card.warn .body { color: #14182B; }
+
+.stat { display: flex; flex-direction: column; gap: 8px; border-top: 6px solid #7B5CD6; padding-top: 32px; }
+.stat.alt { border-top: 6px solid #E8735A; }
+.num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; }
+.num.violet { color: #5B3FC4; }
+
+.code { background: #14182B; border-radius: 16px; padding: 40px; }
+.code .src { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 26px; line-height: 1.6; color: #E6E3F5; }
+.code .src.small { font-size: 24px; }
+.k { color: #B7A6F5; }
+.s { color: #F2B8A8; }
+.cm { color: #8A8FA8; }
+
+.pill { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 28px; background: #E6E3F5; color: #2E2A5C; padding: 12px 24px; border-radius: 12px; }
+.mono { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 28px; color: #2E2A5C; }
+.steps { font-size: 32px; line-height: 1.5; color: #4A4E63; }
+.danger { font-size: 28px; font-weight: 600; color: #8A3220; }
+
+.shot { border-radius: 16px; object-fit: cover; box-shadow: 0 12px 40px rgba(20, 24, 43, 0.18); }
+.caption { font-size: 24px; color: #6B6F80; }
+
+.layer { display: grid; grid-template-columns: 420px 1fr; gap: 32px; align-items: center; color: #F6F4EF; border-radius: 12px; padding: 24px 40px; }
+.layer .name { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 44px; font-weight: 600; }
+.layer .what { font-size: 30px; }
+
+table { font-size: 28px; color: #14182B; }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; color: #6B6F80; }
+
+/* Entrada em etapas: o estado final é o normal; a animação só parte de baixo */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes grow {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.rise { animation: rise 600ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+.grow { animation: grow 700ms ease-out both; animation-delay: calc(var(--i, 0) * 140ms); }
+
+/* Passos no ritmo da fala (clique) */
+.fragment { opacity: 0; transform: translateY(16px); transition: opacity 400ms ease-out, transform 400ms ease-out; }
+.fragment.visible { opacity: 1; transform: translateY(0); }
+
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0B0E1A;overflow:hidden}
+#stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden}
+#stage>section{position:absolute;inset:0;width:1920px;height:1080px}
+iframe.embed{border:0;background:transparent;position:absolute}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:8px 12px;
+  font:14px 'IBM Plex Sans',Arial,sans-serif;color:#C9C6D9;opacity:0;transition:opacity .3s}
+body:hover #bar,#bar:focus-within{opacity:1}
+#bar button{background:#14182B;color:#F6F4EF;border:1px solid rgba(246,244,239,.35);border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#bar button:hover{background:#5B3FC4}
+#count{background:#14182B;color:#F6F4EF;border-radius:6px;padding:4px 10px}
+#count{margin-left:auto}
+#prog{position:fixed;left:0;bottom:0;height:3px;background:#5B3FC4;transition:width .3s}
+@media (hover:none){#bar{opacity:1}}
+</style></head><body>
+<div id="stage"></div>
+<div id="prog"></div>
+<div id="bar"><button id="bp" aria-label="Slide anterior">&larr;</button><button id="bn" aria-label="Próximo slide">&rarr;</button>
+<button id="bf">Tela cheia (F)</button><span id="count"></span></div>
+<template data-id="capa"><section id="capa" class="dark">
+<p class="eyebrow rise" style="--i:0">Aula 2 · Prática</p>
+<h1 class="rise" style="--i:1">Exercícios da Aula 2</h1>
+<p class="sub rise" style="--i:2">Componentes, clique e AR no celular</p>
+</section>
+</template>
+<template data-id="roteiro"><section id="roteiro">
+<div class="head"><p class="eyebrow">Roteiro</p><h2>Cinco partes</h2></div>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:24px">
+<div class="card rise" style="--i:0;padding:32px"><p class="tag-strong">1 · 15 min</p><h3>Componente</h3><p class="body">O girar, escrito por você</p></div>
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">2 · 10 min</p><h3>Clique</h3><p class="body">Mouse no PC, dedo no celular</p></div>
+<div class="card rise" style="--i:2;padding:32px"><p class="tag-strong">3 · 40 min</p><h3>AR em grupo</h3><p class="body">Uma cena no marcador</p></div>
+<div class="card rise" style="--i:3;padding:32px"><p class="tag-strong">4 · em paralelo</p><h3>Quest</h3><p class="body">Demonstração em VR</p></div>
+<div class="card rise" style="--i:4;padding:32px"><p class="tag-strong">5 · 15 min</p><h3>Apresentação</h3><p class="body">Cada grupo mostra a cena</p></div>
+</div>
+<p class="muted">Durante a parte 3, a demonstração no Quest acontece em paralelo. Terminou antes? Tem extra</p>
+</section>
+</template>
+<template data-id="comp-ideia"><section id="comp-ideia">
+<div class="head"><p class="eyebrow">1 · Componente</p><h2>Um atributo novo, feito por você</h2></div>
+<div class="code rise" style="--i:0;padding:28px 40px;align-self:flex-start"><p class="src" style="font-size:24px;white-space:nowrap"><span class="k">&lt;a-box</span> girar=<span class="s">"velocidade: 90"</span><span class="k">&gt;</span><span class="k">&lt;/a-box</span><span class="k">&gt;</span></p></div>
+<div class="grid3">
+<div class="card rise" style="--i:1;padding:32px"><h3>schema</h3><p class="body">Os dados que vêm do HTML: aqui, a velocidade em graus por segundo</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>init</h3><p class="body">Roda uma vez, quando o componente entra na entidade</p></div>
+<div class="card rise" style="--i:3;padding:32px"><h3>tick</h3><p class="body">Roda a cada quadro. O <b>dt</b> diz quantos milissegundos passaram</p></div>
+</div>
+<p class="tag">O script com <b>AFRAME.registerComponent</b> vai no head, antes da a-scene</p></section>
+</template>
+<template data-id="comp-codigo"><section id="comp-codigo">
+<div class="head"><p class="eyebrow">1 · Componente</p><h2>Código completo</h2></div>
+<div style="display:grid;grid-template-columns:1240px 1fr;gap:32px;align-items:start">
+<div class="code rise" style="--i:0;padding:28px 32px"><p class="src" style="font-size:17px;line-height:1.5;white-space:nowrap"><span class="k">&lt;html</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;head</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span> src=<span class="s">"https://aframe.io/releases/1.8.0/aframe.min.js"</span><span class="k">&gt;</span><span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;AFRAME.registerComponent(<span class=\"s\">'girar'</span>, {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;schema: {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;velocidade: { default: 45 }<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;},<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;tick: function (t, dt) {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var rad = THREE.MathUtils.degToRad(this.data.velocidade);<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;this.el.object3D.rotation.y += rad * dt / 1000;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;}<br>&#160;&#160;&#160;&#160;&#160;&#160;});<br>&#160;&#160;&#160;&#160;<span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/head</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;body</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-scene</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-box</span> position=<span class="s">"-1 0.5 -3"</span> color=<span class="s">"#4CC3D9"</span> girar&gt;<span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-cylinder</span> position=<span class="s">"1 0.75 -3"</span> radius=<span class="s">"0.5"</span> height=<span class="s">"1.5"</span> color=<span class="s">"#FFC65D"</span> girar=<span class="s">"velocidade: 180"</span><span class="k">&gt;</span><span class="k">&lt;/a-cylinder</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-plane</span> position=<span class="s">"0 0 -4"</span> rotation=<span class="s">"-90 0 0"</span> width=<span class="s">"4"</span> height=<span class="s">"4"</span> color=<span class="s">"#7BC8A4"</span><span class="k">&gt;</span><span class="k">&lt;/a-plane</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-sky</span> color=<span class="s">"#ECECEC"</span><span class="k">&gt;</span><span class="k">&lt;/a-sky</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;/a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/body</span><span class="k">&gt;</span><br><span class="k">&lt;/html</span><span class="k">&gt;</span></p></div>
+<div class="col" style="gap:16px">
+<iframe class="grow" src="componente.html" style="--i:1;width:390px;height:320px;border:0;border-radius:16px;pointer-events:none;box-shadow:0 12px 40px rgba(20,24,43,.18);background:#ECECEC" title="Caixa e cilindro girando"></iframe>
+<p class="caption">A caixa usa o padrão (45°/s). O cilindro, 180°/s</p>
+</div>
+</div>
+</section>
+</template>
+<template data-id="comp-erros"><section id="comp-erros">
+<div class="head"><p class="eyebrow">1 · Componente · Erro comum</p><h2>Somar um valor fixo por quadro</h2></div>
+<div class="grid2">
+<div class="card warn rise" style="--i:0;padding:32px"><p class="danger">Errado</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap">tick: function () {<br>&#160;&#160;this.el.object3D.rotation.y += 0.01;<br>}</p></div></div>
+<div class="card rise" style="--i:1;padding:32px;background:#E3F3EC;border:2px solid #3AA57A"><p class="danger" style="color:#1E7F5C">Certo</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap">tick: function (t, dt) {<br>&#160;&#160;var rad = THREE.MathUtils.degToRad(this.data.velocidade);<br>&#160;&#160;this.el.object3D.rotation.y += rad * dt / 1000;<br>}</p></div></div>
+</div>
+<p class="tag">Sem o <b>dt</b>, a velocidade depende do FPS: o mesmo código gira mais rápido a 120 Hz do que a 72 Hz</p>
+</section>
+</template>
+<template data-id="clique-codigo"><section id="clique-codigo">
+<div class="head"><p class="eyebrow">2 · Clique</p><h2>Código completo</h2></div>
+<div style="display:grid;grid-template-columns:1240px 1fr;gap:32px;align-items:start">
+<div class="code rise" style="--i:0;padding:28px 32px"><p class="src" style="font-size:16px;line-height:1.45;white-space:nowrap"><span class="k">&lt;html</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;head</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span> src=<span class="s">"https://aframe.io/releases/1.8.0/aframe.min.js"</span><span class="k">&gt;</span><span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;AFRAME.registerComponent(<span class=\"s\">'trocar-cor'</span>, {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;schema: {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;cores: { type: <span class=\"s\">'array'</span>, default: [<span class=\"s\">'#4CC3D9'</span>, <span class=\"s\">'#EF2D5E'</span>, <span class=\"s\">'#FFC65D'</span>, <span class=\"s\">'#7BC8A4'</span>] }<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;},<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;init: function () {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var el = this.el;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var cores = this.data.cores;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var i = 0;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;el.addEventListener(<span class=\"s\">'click'</span>, function () {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;i = (i + 1) % cores.length;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;el.setAttribute(<span class=\"s\">'color'</span>, cores[i]);<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;});<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;}<br>&#160;&#160;&#160;&#160;&#160;&#160;});<br>&#160;&#160;&#160;&#160;<span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/head</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;body</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-scene</span> cursor=<span class="s">"rayOrigin: mouse"</span> raycaster=<span class="s">"objects: .clicavel"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-box</span> class=<span class="s">"clicavel"</span> position=<span class="s">"-1 0.5 -3"</span> color=<span class="s">"#4CC3D9"</span> trocar-cor&gt;<span class="k">&lt;/a-box</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-sphere</span> class=<span class="s">"clicavel"</span> position=<span class="s">"1 1 -3"</span> radius=<span class="s">"0.5"</span> color=<span class="s">"#EF2D5E"</span> trocar-cor&gt;<span class="k">&lt;/a-sphere</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-plane</span> position=<span class="s">"0 0 -4"</span> rotation=<span class="s">"-90 0 0"</span> width=<span class="s">"4"</span> height=<span class="s">"4"</span> color=<span class="s">"#7BC8A4"</span><span class="k">&gt;</span><span class="k">&lt;/a-plane</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-sky</span> color=<span class="s">"#ECECEC"</span><span class="k">&gt;</span><span class="k">&lt;/a-sky</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;/a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/body</span><span class="k">&gt;</span><br><span class="k">&lt;/html</span><span class="k">&gt;</span></p></div>
+<div class="col" style="gap:16px">
+<iframe class="grow" src="clique.html" style="--i:1;width:390px;height:320px;border:0;border-radius:16px;pointer-events:none;box-shadow:0 12px 40px rgba(20,24,43,.18);background:#ECECEC" title="Caixa e esfera que trocam de cor"></iframe>
+<p class="caption">Clique na caixa ou na esfera para trocar a cor</p>
+</div>
+</div>
+</section>
+</template>
+<template data-id="clique-partes"><section id="clique-partes">
+<div class="head"><p class="eyebrow">2 · Clique</p><h2>As três peças do clique</h2></div>
+<div class="grid3">
+<div class="card rise" style="--i:0;padding:32px"><h3>cursor</h3><p class="body"><b>rayOrigin: mouse</b>: o mouse, ou o dedo no celular, vira um raio que sai da câmera</p></div>
+<div class="card rise" style="--i:1;padding:32px"><h3>raycaster</h3><p class="body">Só testa as entidades de <b>objects</b>. Aqui, quem tem a classe <b>clicavel</b></p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>click</h3><p class="body">No <b>init</b>, o componente escuta o evento e troca a cor</p></div>
+</div>
+<p class="tag">No Quest, o mesmo evento click vem do gatilho do controle</p>
+</section>
+</template>
+<template data-id="clique-erro"><section id="clique-erro">
+<div class="head"><p class="eyebrow">2 · Clique · Erro comum</p><h2>Esquecer a classe</h2></div>
+<div class="grid2">
+<div class="card warn rise" style="--i:0;padding:32px"><p class="danger">Errado</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-scene</span> cursor=<span class="s">"rayOrigin: mouse"</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;raycaster=<span class="s">"objects: .clicavel"</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> color=<span class="s">"#4CC3D9"</span> trocar-cor&gt;<span class="k">&lt;/a-box</span><span class="k">&gt;</span><br><span class="k">&lt;/a-scene</span><span class="k">&gt;</span></p></div></div>
+<div class="card rise" style="--i:1;padding:32px;background:#E3F3EC;border:2px solid #3AA57A"><p class="danger" style="color:#1E7F5C">Certo</p><div class="code" style="padding:28px"><p class="src" style="font-size:20px;white-space:nowrap"><span class="k">&lt;a-scene</span> cursor=<span class="s">"rayOrigin: mouse"</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;raycaster=<span class="s">"objects: .clicavel"</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;a-box</span> class=<span class="s">"clicavel"</span> color=<span class="s">"#4CC3D9"</span> trocar-cor&gt;<span class="k">&lt;/a-box</span><span class="k">&gt;</span><br><span class="k">&lt;/a-scene</span><span class="k">&gt;</span></p></div></div>
+</div>
+<p class="tag">O raio só enxerga quem combina com o seletor do raycaster</p>
+</section>
+</template>
+<template data-id="ar-titulo"><section id="ar-titulo" class="dark">
+<p class="eyebrow rise" style="--i:0">3 · AR em grupo</p>
+<h1 class="rise" style="--i:1">Realidade aumentada no celular</h1>
+<p class="sub rise" style="--i:2">7 grupos de 5 pessoas</p>
+</section>
+</template>
+<template data-id="ar-como"><section id="ar-como">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>AR com marcador</h2></div>
+<div class="grid3">
+<div class="card rise" style="--i:0;padding:32px"><h3>Marcador</h3><p class="body">A câmera procura o desenho <b>Hiro</b>, impresso ou na tela</p></div>
+<div class="card rise" style="--i:1;padding:32px"><h3>Cena em cima</h3><p class="body">O que estiver dentro de <b>a-marker</b> aparece sobre o marcador e acompanha ele</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>Qualquer celular</h3><p class="body">iPhone e Android, no navegador. Precisa de HTTPS e da permissão da câmera</p></div>
+</div>
+<p class="tag">Por que não WebXR? O Safari do iPhone não tem WebXR. O AR.js usa só a câmera, pelo navegador</p>
+</section>
+</template>
+<template data-id="ar-teste"><section id="ar-teste">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>Teste agora no seu celular</h2></div>
+<div style="display:grid;grid-template-columns:520px 1fr;gap:64px;align-items:center">
+<img class="grow" src="img/qr-ar.png" style="--i:0;width:520px;height:520px;border-radius:16px" alt="QR code da página de AR">
+<div class="col">
+<ol class="steps rise" style="--i:1;padding-left:44px;font-size:36px">
+<li>Leia o QR code com a câmera do celular</li>
+<li>Permita o uso da câmera</li>
+<li>Aponte para o marcador do próximo slide</li>
+</ol>
+<p class="pill rise" style="--i:2;align-self:flex-start;font-size:24px">liliangisellyps.github.io/minicurso-xr-aframe/aula2/ar.html</p>
+</div>
+</div>
+</section>
+</template>
+<template data-id="ar-marcador"><section id="ar-marcador" style="background:#FFFFFF;align-items:center;justify-content:center;padding:60px">
+<img src="img/hiro.png" style="width:900px;height:900px" alt="Marcador Hiro">
+</section>
+</template>
+<template data-id="ar-codigo"><section id="ar-codigo">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>Código completo · parte 1: o head</h2></div>
+<div class="code rise" style="--i:0;padding:24px 32px"><p class="src" style="font-size:18px;line-height:1.5;white-space:nowrap"><span class="k">&lt;html</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;head</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;meta</span> name=<span class="s">"viewport"</span> content=<span class="s">"width=device-width, initial-scale=1"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span> src=<span class="s">"https://aframe.io/releases/1.3.0/aframe.min.js"</span><span class="k">&gt;</span><span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span> src=<span class="s">"https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"</span><span class="k">&gt;</span><span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;script</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;AFRAME.registerComponent(<span class=\"s\">'girar'</span>, {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;schema: {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;velocidade: { default: 45 }<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;},<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;tick: function (t, dt) {<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;var rad = THREE.MathUtils.degToRad(this.data.velocidade);<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;this.el.object3D.rotation.y += rad * dt / 1000;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;}<br>&#160;&#160;&#160;&#160;&#160;&#160;});<br>&#160;&#160;&#160;&#160;<span class="k">&lt;/script</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/head</span><span class="k">&gt;</span></p></div>
+<p class="tag">O AR.js pede o A-Frame <b>1.3.0</b>, não o 1.8.0. O componente girar é o mesmo da parte 1</p>
+</section>
+</template>
+<template data-id="ar-codigo2"><section id="ar-codigo2">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>Código completo · parte 2: o body</h2></div>
+<div class="code rise" style="--i:0;padding:24px 32px"><p class="src" style="font-size:18px;line-height:1.5;white-space:nowrap">&#160;&#160;<span class="k">&lt;body</span> style=<span class="s">"margin: 0; overflow: hidden;"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;a-scene</span> embedded arjs=<span class="s">"sourceType: webcam; debugUIEnabled: false;"</span> vr-mode-ui=<span class="s">"enabled: false"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-assets</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-asset-item</span> id=<span class="s">"pato"</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;src=<span class="s">"https://raw.githubusercontent.com/KhronosGroupArchives/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;/a-asset-item</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;/a-assets</span><span class="k">&gt;</span><br><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-marker</span> preset=<span class="s">"hiro"</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-entity</span> gltf-model=<span class="s">"#pato"</span> scale=<span class="s">"0.3 0.3 0.3"</span> girar=<span class="s">"velocidade: 90"</span><span class="k">&gt;</span><span class="k">&lt;/a-entity</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;/a-marker</span><span class="k">&gt;</span><br><br>&#160;&#160;&#160;&#160;&#160;&#160;<span class="k">&lt;a-entity</span> camera&gt;<span class="k">&lt;/a-entity</span><span class="k">&gt;</span><br>&#160;&#160;&#160;&#160;<span class="k">&lt;/a-scene</span><span class="k">&gt;</span><br>&#160;&#160;<span class="k">&lt;/body</span><span class="k">&gt;</span><br><span class="k">&lt;/html</span><span class="k">&gt;</span></p></div>
+<p class="pill rise" style="--i:1;align-self:flex-start;font-size:24px">Arquivo inteiro: liliangisellyps.github.io/minicurso-xr-aframe/aula2/ar.html (Ctrl + U mostra o código)</p>
+</section>
+</template>
+<template data-id="ar-partes"><section id="ar-partes">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>O que muda numa cena de AR</h2></div>
+<div class="grid3">
+<div class="card rise" style="--i:0;padding:32px"><h3>arjs</h3><p class="body">Na <b>a-scene</b>: liga a câmera (<b>sourceType: webcam</b>) e o rastreamento</p></div>
+<div class="card rise" style="--i:1;padding:32px"><h3>a-marker</h3><p class="body"><b>preset="hiro"</b>: tudo que estiver dentro aparece sobre o marcador</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>camera</h3><p class="body">Uma <b>a-entity camera</b> simples, sem chão nem céu: o fundo é a câmera</p></div>
+</div>
+<p class="tag">No marcador, 1 unidade = a largura do marcador. Por isso o pato usa scale 0.3</p>
+</section>
+</template>
+<template data-id="ar-tarefa"><section id="ar-tarefa">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>Tarefa do grupo</h2></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+<div class="card rise" style="--i:0;padding:40px"><p class="tag-strong">A cena precisa ter</p>
+<ol class="steps" style="padding-left:40px;font-size:30px"><li>Um modelo GLB (link Raw)</li><li>Uma primitiva do A-Frame</li><li>O componente <b>girar</b> em pelo menos um objeto</li><li>Um tema escolhido pelo grupo</li></ol></div>
+<div class="card dk rise" style="--i:1;padding:40px"><p class="tag-strong">Papéis no grupo</p>
+<ol class="steps" style="padding-left:40px;font-size:30px;color:#C9C6D9"><li><b>Código</b>: no notebook, no CodePen</li><li><b>Modelo</b>: escolhe o GLB e acerta o scale</li><li><b>Teste</b>: roda no celular e no marcador</li><li><b>Apresentação</b>: mostra a cena no fim</li></ol></div>
+</div>
+<p class="tag">Comece pelo código completo do AR (head e body) e vá trocando as peças</p>
+</section>
+</template>
+<template data-id="ar-testar"><section id="ar-testar">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>Como testar a cena do grupo</h2></div>
+<div class="grid2">
+<div class="card rise" style="--i:0;padding:32px"><p class="tag-strong">No notebook</p><h3>Webcam + celular</h3><p class="body">Rode o código no CodePen e permita a câmera. Mostre o marcador na tela de um celular para a webcam</p></div>
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">No celular</p><h3>Página aberta no celular</h3><p class="body">No CodePen: Change View → Full Page. Abra esse endereço no celular e aponte para o marcador</p></div>
+</div>
+<p class="pill rise" style="--i:2;align-self:flex-start;font-size:24px">Marcador para abrir no celular: liliangisellyps.github.io/minicurso-xr-aframe/aula2/img/hiro.png</p>
+</section>
+</template>
+<template data-id="ar-erros"><section id="ar-erros">
+<div class="head"><p class="eyebrow">3 · AR em grupo</p><h2>O modelo não aparece: o que conferir</h2></div>
+<div class="grid2" style="row-gap:24px">
+<div class="card rise" style="--i:0;padding:32px"><h3>Câmera</h3><p class="body">O navegador pediu permissão? Se negou, libere nas configurações do site</p></div>
+<div class="card rise" style="--i:1;padding:32px"><h3>Marcador</h3><p class="body">Inteiro na imagem, com a borda branca, sem reflexo de luz</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>Tamanho</h3><p class="body">Gigante ou sumido? Lembre: o marcador mede 1 unidade</p></div>
+<div class="card rise" style="--i:3;padding:32px"><h3>Versão</h3><p class="body">O AR.js 3.4.5 pede o A-Frame 1.3.0. Confira o primeiro script do head</p></div>
+</div>
+</section>
+</template>
+<template data-id="extra"><section id="extra">
+<div class="head"><p class="eyebrow">Extra · Para quem terminar</p><h2>Deixe a cena do grupo mais rica</h2></div>
+<div class="grid2" style="row-gap:24px">
+<div class="card rise" style="--i:0;padding:32px"><p class="tag-strong">1 · Hierarquia</p><h3>Uma mesa no marcador</h3><p class="body">Uma <b>a-entity</b> pai com o tampo, e o modelo em cima como filho. Mova a mesa inteira mudando só o pai</p></div>
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">2 · Componente novo</p><h3>flutuar</h3><p class="body">Um componente seu que faz o objeto subir e descer, com <b>Math.sin</b> no tick</p></div>
+<div class="card rise" style="--i:2;padding:32px"><p class="tag-strong">3 · Toque</p><h3>Girar mais rápido</h3><p class="body">Tocar no objeto, no celular, aumenta a velocidade do <b>girar</b></p></div>
+<div class="card rise" style="--i:3;padding:32px"><p class="tag-strong">4 · Pronto do A-Frame</p><h3>animation</h3><p class="body">Animar a posição, a cor ou a escala sem escrever JavaScript</p></div>
+</div>
+<p class="tag">Escolham na ordem que quiserem. As dicas estão nos próximos slides</p>
+</section>
+</template>
+<template data-id="extra-flutuar"><section id="extra-flutuar">
+<div class="head"><p class="eyebrow">Extra · Dica</p><h2>flutuar: sobe e desce</h2></div>
+<div class="code rise" style="--i:0;padding:28px 40px;align-self:flex-start"><p class="src" style="font-size:22px;white-space:nowrap">AFRAME.registerComponent(<span class=\"s\">'flutuar'</span>, {<br>&#160;&#160;schema: { amplitude: { default: 0.2 } },<br>&#160;&#160;init: function () {<br>&#160;&#160;&#160;&#160;this.base = this.el.object3D.position.y;<br>&#160;&#160;},<br>&#160;&#160;tick: function (t) {<br>&#160;&#160;&#160;&#160;this.el.object3D.position.y = this.base + this.data.amplitude * Math.sin(t / 1000);<br>&#160;&#160;}<br>});</p></div>
+<div class="grid3">
+<div class="card rise" style="--i:1;padding:32px"><h3>init</h3><p class="body">Guarda a altura inicial do objeto</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>tick</h3><p class="body"><b>t</b> é o tempo em milissegundos. O seno vai de -1 a 1</p></div>
+<div class="card rise" style="--i:3;padding:32px"><h3>Teste</h3><p class="body">Mude a amplitude no HTML: <b>flutuar="amplitude: 0.5"</b></p></div>
+</div>
+</section>
+</template>
+<template data-id="extra-toque"><section id="extra-toque">
+<div class="head"><p class="eyebrow">Extra · Dica</p><h2>Toque e animation</h2></div>
+<div class="grid2" style="align-items:start">
+<div class="col">
+<p class="tag-strong rise" style="--i:0">3 · Toque</p>
+<div class="code rise" style="--i:1;padding:24px 28px"><p class="src" style="font-size:18px;white-space:nowrap">el.addEventListener(<span class=\"s\">'click'</span>, function () {<br>&#160;&#160;el.setAttribute(<span class=\"s\">'girar'</span>, <span class=\"s\">'velocidade'</span>, 360);<br>});</p></div>
+<p class="muted rise" style="--i:2;font-size:26px">Igual à parte 2: cursor e raycaster na a-scene, classe no objeto</p>
+</div>
+<div class="col">
+<p class="tag-strong rise" style="--i:3">4 · animation</p>
+<div class="code rise" style="--i:4;padding:24px 28px"><p class="src" style="font-size:18px;white-space:nowrap"><span class="k">&lt;a-sphere</span> radius=<span class="s">"0.1"</span> color=<span class="s">"#EF2D5E"</span><br>&#160;&#160;animation="property: position; to: 0 0.9 0;<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;dir: alternate; loop: true; dur: 1000"<span class="k">&gt;</span><br><span class="k">&lt;/a-sphere</span><span class="k">&gt;</span></p></div>
+<p class="muted rise" style="--i:5;font-size:26px">Troque <b>property</b> por rotation, scale ou material.color</p>
+</div>
+</div>
+<p class="pill rise" style="--i:6;align-self:flex-start;font-size:24px">aframe.io/docs/1.3.0/components/animation.html</p>
+</section>
+</template>
+<template data-id="quest"><section id="quest">
+<div class="head"><p class="eyebrow">4 · Quest</p><h2>Demonstração em VR, durante a parte 3</h2></div>
+<div class="grid3">
+<div class="card rise" style="--i:0;padding:32px"><h3>Uma pessoa por grupo</h3><p class="body">O grupo escolhe quem vai testar</p></div>
+<div class="card rise" style="--i:1;padding:32px"><h3>Uns 3 minutos</h3><p class="body">Para dar tempo a todos os grupos</p></div>
+<div class="card rise" style="--i:2;padding:32px"><h3>O grupo segue</h3><p class="body">Quem fica continua a cena de AR</p></div>
+</div>
+<p class="tag">Um projeto em VR desenvolvido pela professora, no Meta Quest 3S</p>
+</section>
+</template>
+<template data-id="apresentacao"><section id="apresentacao">
+<div class="head"><p class="eyebrow">5 · Apresentação</p><h2>Cada grupo mostra a cena: 2 minutos</h2></div>
+<div class="grid3">
+<div class="card rise" style="--i:0;padding:32px"><p class="tag-strong">1</p><h3>A cena no marcador</h3><p class="body">Mostre no celular ou na webcam</p></div>
+<div class="card rise" style="--i:1;padding:32px"><p class="tag-strong">2</p><h3>O que tem nela</h3><p class="body">Modelo, primitiva e o girar</p></div>
+<div class="card rise" style="--i:2;padding:32px"><p class="tag-strong">3</p><h3>O que deu errado</h3><p class="body">E como o grupo resolveu</p></div>
+</div>
+</section>
+</template>
+<script>
+var T=[].slice.call(document.querySelectorAll('template')),stage=document.getElementById('stage'),cur=-1,frags=[],shown=0;
+function fit(){var d=document.documentElement,s=Math.min(d.clientWidth/1920,d.clientHeight/1080);stage.style.transform='scale('+s+') translate(-50%,-50%)';}
+function show(i,fromEnd){i=Math.max(0,Math.min(T.length-1,i));cur=i;stage.innerHTML='';
+  stage.appendChild(T[i].content.cloneNode(true));frags=[].slice.call(stage.querySelectorAll('.fragment'));
+  shown=fromEnd?frags.length:0;frags.forEach(function(f,k){f.classList.toggle('visible',k<shown)});
+  document.getElementById('count').textContent=(i+1)+' / '+T.length;
+  document.getElementById('prog').style.width=((i+1)/T.length*100)+'%';
+  history.replaceState(null,'','#'+(i+1));}
+function next(){if(shown<frags.length){frags[shown++].classList.add('visible');}else if(cur<T.length-1)show(cur+1);}
+function prev(){if(shown>0&&frags.length){frags[--shown].classList.remove('visible');}else if(cur>0)show(cur-1,true);}
+function full(){if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+addEventListener('keydown',function(e){var k=e.key;
+  if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();next();}
+  else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){e.preventDefault();prev();}
+  else if(k==='Home')show(0);else if(k==='End')show(T.length-1);else if(k==='f'||k==='F')full();});
+document.addEventListener('click',function(e){if(e.target.closest('#bar'))return;(e.clientX<innerWidth/3?prev:next)();});
+var x0=null;addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;
+  if(Math.abs(dx)>50){e.preventDefault();(dx<0?next:prev)();}});
+document.getElementById('bp').onclick=prev;document.getElementById('bn').onclick=next;document.getElementById('bf').onclick=full;
+function fromHash(){var n=(parseInt(location.hash.slice(1),10)||1)-1;if(n!==cur)show(n);}
+addEventListener('hashchange',fromHash);addEventListener('resize',fit);fit();fromHash();
+</script></body></html>
